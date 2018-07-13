@@ -28,7 +28,7 @@ import net.sf.log4jdbc.tools.LoggingType;
 
 
 @Configuration
-public class DataSourceConfigB2C {
+public class DataSourceConfigB2C extends DataSourceConfig {
 	
 	@Autowired
 	private Environment env;
@@ -64,6 +64,7 @@ public class DataSourceConfigB2C {
 	 * @throws Exception
 	 */
 	@Bean(name = "sqlSessionFactoryB2C")
+	
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		
     	SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
