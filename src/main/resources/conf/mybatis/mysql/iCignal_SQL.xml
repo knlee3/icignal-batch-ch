@@ -301,6 +301,35 @@
 	</update>
 	
 	
+	
+	<!--  일별 주문 집계 -->
+	<insert id="loadOrdProdDailySum" parameterType="icignal.batch.model.Order">
+	   INSERT 
+	   INTO mrt.ch_ord_prod_daily_sum
+	   (
+	   	ord_dt
+		,mem_cd
+		,prod_cd
+		,prod_cnt
+		,ord_amt
+		,ord_cnt
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{ordDt}
+	     ,#{memCd}
+	     ,#{prodCd}
+	     ,#{prodCnt}
+	     ,#{ordAmt}
+	     ,#{ordCnt}
+	     ,#{createBy}
+	     ,#{modifyBy}  
+	   )
+	</insert>
+	
+	
     
 </mapper>
 
