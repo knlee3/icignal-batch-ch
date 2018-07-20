@@ -26,6 +26,7 @@ import icignal.batch.product.extract.ProductExtractListener;
 import icignal.batch.product.load.ProductLoadItemReader;
 import icignal.batch.product.load.ProductLoadItemWriter;
 import icignal.batch.tasklet.MemberLoadTasklet;
+import icignal.batch.tasklet.SumMemAgreeDailyTasklet;
 import icignal.batch.grade.extract.GradeExtractItemReader;
 import icignal.batch.grade.extract.GradeExtractItemWriter;
 import icignal.batch.grade.extract.GradeExtractListener;
@@ -131,6 +132,22 @@ public class BatchConfig {
 	}
 	
 	
+	
+	
+	
+	
+	@Bean(name="jobSumMemAgreeDaily")
+	public Job jobSumMemAgreeDaily() throws Exception {
+		Job job = jobBuilderFactory.get("jobSumMemAgreeDaily")
+								   .incrementer(new RunIdIncrementer())
+                                   .start(stepSumMemAgreeDaily())
+								   .build();
+		return job;
+	}
+	
+	
+	
+	
 	@Bean(name="stepProductExtract")
 	public Step stepProductExtract() throws Exception {
 		return stepBuilderFactory.get("stepProductExtract").<ProductB2C, ProductB2C>chunk(1000)		
@@ -191,6 +208,15 @@ public class BatchConfig {
 				.tasklet(new MemberLoadTasklet(mapper))
 				.build();
 	}
+	
+	
+	@Bean(name="stepSumMemAgreeDaily")
+	public Step stepSumMemAgreeDaily() throws Exception {
+		return stepBuilderFactory.get("stepMemberLoad")
+				.tasklet(new SumMemAgreeDailyTasklet(mapper))
+				.build();
+	}
+	
 	
 	
 }
