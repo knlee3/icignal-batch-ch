@@ -14,7 +14,7 @@ import icignal.batch.b2c.dao.MemberB2cDao;
 
 import icignal.batch.model.MemberB2C;
 
-@Repository
+//@Repository
 public class MemberB2cDaoImpl implements MemberB2cDao{
 
 		

@@ -28,12 +28,12 @@ public class MemberDaoImpl extends JdbcDaoSupport implements MemberDao {
 	}
 	
 	
-/*	public void truncate(String tableName) {
-		String sql = "truncate table " + tableName;
-		getJdbcTemplate().execute(sql);
-		
-	}*/
+	/*	public void truncate(String tableName) {
+	String sql = "truncate table " + tableName;
+	getJdbcTemplate().execute(sql);
 	
+}*/
+
 	
 	@Override
 	public void insertMemStg(List<? extends MemberB2C> members) {		
@@ -41,11 +41,16 @@ public class MemberDaoImpl extends JdbcDaoSupport implements MemberDao {
 		sql.append("INSERT INTO mrt.ch_mem_stg ( ")
 		   .append("MemberCode, MAddPMcode, MemberType, MemberStatus, MemberName, MemberCellnum, MemberCellAgree, " )
 		   .append("MemberEmail, MemberEmailAgree, MemberID, IGradeIDX, MAddJoinFrom, MAddGender, MAddBirthday, " ) 
-		   .append("MAddLoginDate, MAddJoinDate, MAddModDate, MAgrmagazine, MAgrRcvCall, MAgrPIoffer, create_by, modify_by")
+		   .append("MAddLoginDate, MAddJoinDate, MAddModDate,  create_by, modify_by")
 		   .append(" ) VALUES ( ")
-		   .append(" ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ")
+		   .append(" ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?  ")
 		   .append(" )");
 		  
+		/*
+		SELECT MemberCode, MAddPMcode, MemberType, MemberStatus, MemberName, MemberCellnum, MemberCellAgree, MemberEmail, 
+		MemberEmailAgree, MemberID, IGradeIDX, MAddJoinFrom, MAddGender,
+		MAddBirthday, MAddLoginDate, MAddJoinDate, MAddModDate, create_by, modify_by, create_date, modify_date FROM mrt.ch_mem_stg;
+		*/
 		getJdbcTemplate().batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				MemberB2C member = members.get(i);
@@ -66,11 +71,9 @@ public class MemberDaoImpl extends JdbcDaoSupport implements MemberDao {
 				ps.setDate(15, member.getMAddLoginDate());				
 				ps.setDate(16, member.getMAddJoinDate());
 				ps.setDate(17, member.getMAddModDate());
-				ps.setString(18, member.getMAgrmagazine());
-				ps.setString(19, member.getMAgrRcvCall());
-				ps.setString(20, member.getMAgrPIoffer());
-				ps.setString(21, "batch_admin");
-				ps.setString(22, "batch_admin");
+				
+				ps.setString(18, "batch_admin");
+				ps.setString(19, "batch_admin");
 			
 			}
 
@@ -120,21 +123,7 @@ public class MemberDaoImpl extends JdbcDaoSupport implements MemberDao {
 	@Override
 	public int countLoadMembers() {
 		String sql = "SELECT count(*) cnt FROM mrt.ch_mem_stg";
-		//List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
 		int result  = getJdbcTemplate().queryForObject(sql, Integer.class);
-		 
-	 
-		
-	//	List<MemberB2C> result = new ArrayList<MemberB2C>();
-		/*for (Map<String, Object> row : rows) {
-			result = row.get("cnt");
-			MemberB2C customer = new MemberB2C();
-			customer.setId((Long) row.get("id"));
-			customer.setFirstName((String) row.get("first_name"));
-			customer.setLastName((String) row.get("last_name"));
-			result.add(customer);
-		}*/
-
 		return result;
 	}
 

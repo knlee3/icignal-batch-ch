@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="icignal.batch.b2c.repository.B2CMapper">
+    
+        <select id="findMemberByUpdDt" resultType="icignal.batch.model.MemberB2C">
+        <![CDATA[
+        	select   
+					a.MemberCode	as memberCode					 
+				,	'G'	as memberType	
+				,	MemberStatus as memberStatus	 
+				,	MemberName		as memberName	 
+				,	MemberCellnum	as memberCellnum	 
+				,	MemberCellAgree	 as memberCellAgree	 
+				,	MemberEmail	     as memberEmail		 
+				,	MemberEmailAgree as memberEmailAgree  
+				,	MemberID		as memberID 	 
+				,	IGradeIDX		as IGradeIDX	 
+				,	MAddJoinFrom	as MAddJoinFrom	 
+				,	MAddGender		as MAddGender	 
+				,	MAddBirthday	as MAddBirthday	 
+				,	b.MAddLoginDate	 as MAddLoginDate	 
+				,	MAddJoinDate	as MAddJoinDate	 
+				,	b.MAddModDate	as MAddModDate	 
+			from member_basic a with(nolock)
+			join member_add b on a.memberCode = b.memberCode
+			where b.MAddModDate >= #{from} and b.MAddModDate <  #{to}
+         ]]>
+        
+        </select>
+        
+       <select id="findMemberOtherAgreeByUpdDt" resultType="icignal.batch.model.MemberB2C">
+        <![CDATA[
+			select  
+				  a.memberCode as memberCode
+				 ,a.MAgrmagazine as MAgrmagazine
+				 ,a.MAgrRcvCall	 as MAgrRcvCall
+				 ,a.MAgrPIoffer  as MAgrPIoffer
+				 ,a.MAgrRegDate  as MAgrRegDate
+			     ,a.MAgrModDate  as MAgrModDate
+			 from MEMBER_OTHER_AGREE a with(nolock)
+			where a.MAgrModDate  >= #{from} and a.MAgrModDate <  #{to}
+         ]]>
+        </select>
+        
+        
+  
+		<select id="findMobileAppInfoByUpdDt" resultType="icignal.batch.model.MemberB2C">
+        <![CDATA[
+			select  
+				  a.memberCode as memberCode
+				 ,a.PushAgree as PushAgree
+				 ,a.PushAgreeDate	 as PushAgreeDate
+			 from MOBILE_APP_INFO a with(nolock)
+			where a.RegDate  >= #{from} and a.RegDate <  #{to}
+         ]]>
+        </select>
+        
+        
+        <select id="findGradeByUpdDt" resultType="icignal.batch.model.GradeB2C">
+        <![CDATA[
+			select  
+				   a.IGradeIDX
+				  ,a.IGradeName
+				  ,a.IGradeRegDate
+				  ,a.IGradeModDate
+			 from INFO_GRADE a with(nolock)
+			where a.IGradeModDate  >= #{from} and a.IGradeModDate <  #{to}
+         ]]>
+        </select>
+        
+        
+        
+        
+        <select id="findProductByUpdDt" resultType="icignal.batch.model.ProductB2C">
+        <![CDATA[
+			select  
+				 ProductCode
+				,a.ProductStatus
+				,a.ProductType
+				,a.ProductComposition
+				,a.ProductName
+				,a.ProductBrand
+				,a.ProductRegDate
+				,a.ProductModDate
+			 from PRODUCT_BASIC a  with (nolock)
+			where a.ProductModDate  >= #{from} and a.ProductModDate <  #{to}
+         ]]>
+        </select>
+        
+        
+        
+    
+</mapper>
+
+

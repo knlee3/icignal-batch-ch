@@ -2,13 +2,12 @@ package icignal.batch.model;
 
 import java.sql.Date;
 
-public class MemberB2C {
+public class MemberB2C extends CommonModel {
 
 	private String memberCode;
-	private String memberType;
-
 	private String MAddPMcode;
-
+	private String memberType;
+	
 	private String memberStatus;
 	private String memberName;
 	private String memberCellnum;
@@ -27,7 +26,11 @@ public class MemberB2C {
 	private String MAgrRcvCall;
 	private String MAgrPIoffer;
 	private String PushAgree;
-
+	private Date PushAgreeDate;
+	
+	private Date MAgrRegDate;
+	private Date MAgrModDate;
+	
 	
 	private String createBy;
 	private String modifyBy;
@@ -174,6 +177,24 @@ public class MemberB2C {
 	}
 	public void setPushAgree(String pushAgree) {
 		PushAgree = pushAgree;
+	}
+	public Date getMAgrRegDate() {
+		return MAgrRegDate;
+	}
+	public void setMAgrRegDate(Date mAgrRegDate) {
+		MAgrRegDate = mAgrRegDate;
+	}
+	public Date getMAgrModDate() {
+		return MAgrModDate;
+	}
+	public void setMAgrModDate(Date mAgrModDate) {
+		MAgrModDate = mAgrModDate;
+	}
+	public Date getPushAgreeDate() {
+		return PushAgreeDate;
+	}
+	public void setPushAgreeDate(Date pushAgreeDate) {
+		PushAgreeDate = pushAgreeDate;
 	}
 	
 	

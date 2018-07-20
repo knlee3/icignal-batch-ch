@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="icignal.batch.icg.repository.ICGMapper">
+    
+    <update id="truncateTable" parameterType="String">
+        truncate table ${tableName}
+    </update>
+    	
+    
+    
+    <insert id="insertChMemStg" parameterType="icignal.batch.model.MemberB2C">
+    INSERT 
+      INTO mrt.ch_mem_stg 
+      ( 
+		   	MemberCode
+		   ,MAddPMcode
+		   ,MemberType
+		   ,MemberStatus
+		   ,MemberName
+		   ,MemberCellnum
+		   ,MemberCellAgree
+		   ,MemberEmail
+		   ,MemberEmailAgree
+		   ,MemberID
+		   ,IGradeIDX
+		   ,MAddJoinFrom
+		   ,MAddGender
+		   ,MAddBirthday
+		   ,MAddLoginDate
+		   ,MAddJoinDate
+		   ,MAddModDate
+		   ,create_by
+		   ,modify_by
+		   ,create_date
+		   ,modify_date
+	) VALUES ( 
+		   #{memberCode}
+		  ,#{MAddPMcode}
+		  ,#{memberType}
+		  ,#{memberStatus}
+		  ,#{memberName}
+		  ,#{memberCellnum}
+		  ,#{memberCellAgree}
+		  ,#{memberEmail}
+		  ,#{memberEmailAgree}
+		  ,#{memberID}
+		  ,#{IGradeIDX}
+		  ,#{MAddJoinFrom}		  
+		  ,#{MAddGender}
+		  ,#{MAddBirthday}
+		  ,#{MAddLoginDate}		  
+		  ,#{MAddJoinDate}		  
+		  ,#{MAddModDate}
+		  ,'batch_admin'
+		  ,'batch_admin'
+		  , sysdate()
+		  , sysdate()
+		
+		    );
+     </insert>  
+     
+     <insert id="insertChMemOtherAgreeStg" parameterType="icignal.batch.model.MemberB2C">
+	    INSERT 
+	      INTO mrt.ch_mem_other_agree_stg 
+	      ( 
+			   	MemberCode
+			   ,MAgrmagazine
+			   ,MAgrRcvCall
+			   ,MAgrPIoffer
+			   ,MAgrRegDate
+			   ,MAgrModDate
+			   ,create_by
+			   ,modify_by
+			   ,create_date
+		   	   ,modify_date
+		) VALUES ( 
+			   #{memberCode}
+			  ,#{MAgrmagazine}
+			  ,#{MAgrRcvCall}
+			  ,#{MAgrPIoffer}
+			  ,#{MAgrRegDate}
+			  ,#{MAgrModDate}
+			  ,'batch_admin'
+			  ,'batch_admin'
+			  ,sysdate()
+			  ,sysdate()
+			
+			    );
+     </insert>  
+     
+     
+     
+     
+     <insert id="insertChMobileAppInfoStg" parameterType="icignal.batch.model.MemberB2C">
+	    INSERT 
+	      INTO mrt.ch_mobile_app_info_stg 
+	      ( 
+			   	MemberCode
+			   ,PushAgree
+			   ,PushAgreeDate
+			   ,create_by
+			   ,modify_by
+		   	   ,create_date
+		   	   ,modify_date
+		) VALUES ( 
+			   #{memberCode}
+			  ,#{PushAgree}
+			  ,#{PushAgreeDate}
+			  ,'batch_admin'
+			  ,'batch_admin'
+			  ,sysdate()
+			  ,sysdate()
+			    );
+     </insert>  
+     
+     
+     <select id="cntChMemStg" resultType="int">
+	     SELECT 
+	     		count(*) cnt 
+	       FROM mrt.ch_mem_stg
+     </select>
+     
+     
+       
+     <select id="cntChGradeStg" resultType="int">
+	     SELECT 
+	     		count(*) cnt 
+	       FROM mrt.ch_grade_stg
+     </select>
+     
+     <select id="cntChProdStg" resultType="int">
+	     SELECT 
+	     		count(*) cnt 
+	       FROM mrt.ch_prod_stg
+     </select>
+     
+     
+     
+     
+     
+     <select id="findAllChProdStg" resultType="icignal.batch.model.ProductB2C">
+	     SELECT 
+	     		 ProductCode
+			   	,ProductStatus
+			   	,ProductType
+				,ProductComposition
+				,ProductName
+				,ProductBrand
+	       FROM mrt.ch_prod_stg
+     </select>
+     
+     
+     
+     
+      <insert id="insertChGradeStg" parameterType="icignal.batch.model.GradeB2C">
+	    INSERT 
+	      INTO mrt.ch_grade_stg 
+	      ( 
+		    IGradeIDX
+		   ,IGradeName
+		   ,IGradeRegDate
+		   ,IGradeModDate
+		   ,create_by
+	   	   ,modify_by
+	   	   ,create_date
+	   	   ,modify_date
+		) VALUES ( 
+		   #{IGradeIDX}
+		  ,#{IGradeName}
+		  ,#{IGradeRegDate}
+		  ,#{IGradeModDate}
+		  ,'batch_admin'
+		  ,'batch_admin'
+		  ,sysdate()
+		  ,sysdate()
+		);
+     </insert>  
+     
+     
+       <select id="findAllChGradeStg" resultType="icignal.batch.model.GradeB2C">
+	     SELECT 
+	     		IGradeIDX
+		   	    ,IGradeName
+	       FROM mrt.ch_grade_stg
+     </select>
+     
+     
+     
+     <insert id="loadGrade" parameterType="icignal.batch.model.ProductB2C">
+        INSERT 
+	      INTO loy.loy_tiers 
+	    ( 
+	         rid
+           	,tier_cd
+			,tier_nm
+            ,create_by
+		   	,modify_by
+		   	,create_date
+		   	,modify_date
+		) VALUES ( 
+		    com.getNewID('A')
+		   ,#{IGradeIDX}
+		   ,#{IGradeName}
+		   ,'batch_admin'
+		   ,'batch_admin'
+		   ,sysdate()
+		   ,sysdate()
+		)
+		ON DUPLICATE KEY 
+		UPDATE		
+     		 tier_nm = #{IGradeName}
+            ,modify_by = 'batch_admin'
+            ,modify_date = sysdate()
+     </insert>
+     
+     		
+     
+     <insert id="insertChProdStg" parameterType="icignal.batch.model.ProductB2C">
+	    INSERT 
+	      INTO mrt.ch_prod_stg 
+	      ( 
+		   	 ProductCode
+		   	,ProductStatus
+		   	,ProductType
+			,ProductComposition
+			,ProductName
+			,ProductBrand
+			,ProductRegDate
+			,ProductModDate
+		   	,create_by
+		   	,modify_by
+		   	,create_date
+		   	,modify_date
+		) VALUES ( 
+			   #{productCode}
+			  ,#{productStatus}
+			  ,#{productType}
+			  ,#{productComposition}
+			  ,#{productName}
+			  ,#{productBrand}
+			  ,#{productRegDate}			 
+			  ,#{productModDate}
+			  ,'batch_admin'
+			  ,'batch_admin'
+			  , sysdate()
+			  , sysdate()
+			    );
+     </insert>  
+     
+     <insert id="loadProduct" parameterType="icignal.batch.model.ProductB2C">
+     	INSERT 
+	      INTO loy.loy_prod 
+	      ( 
+	         rid
+		   	,prod_id
+			,status_cd
+			,prod_type
+			,prod_composition
+			,prod_nm
+			,prod_brand		   
+		   	,create_by
+		   	,modify_by
+		   	,create_date	
+		   	,modify_date	 
+		) VALUES ( 
+		      com.getNewID('A')
+			  ,#{productCode}
+			  ,#{productStatus}
+			  ,#{productType}
+			  ,#{productComposition}
+			  ,#{productName}
+			  ,#{productBrand}
+			  ,'batch_admin'
+			  ,'batch_admin'
+			  ,sysdate()
+			  ,sysdate()
+		)
+		ON DUPLICATE KEY 
+		UPDATE		
+			 status_cd = #{productStatus}
+			,prod_type = #{productType}
+			,prod_composition = #{productComposition}
+			,prod_nm = #{productName}			
+			,prod_brand	= #{productBrand}
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
+     </insert>
+     
+     <!--  
+	   회원정보 icignal로 로딩
+     -->
+     <update id="loadMember" parameterType="long"  statementType = "CALLABLE">
+		call mrt.proc_mem_load(#{pJobExecId})
+	</update>
+	
+	<!--  회원 수신동의정보 일 집계 -->
+	<update id="summaryMemAgreeDaily" parameterType="long"  statementType = "CALLABLE">
+		call mrt.proc_mem_agree_daily_summary(#{pJobExecId})
+	</update>
+	
+	
+    
+</mapper>
+
+
