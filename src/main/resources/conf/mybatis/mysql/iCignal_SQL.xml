@@ -330,6 +330,58 @@
 	</insert>
 	
 	
+	
+	<!--  일별 무료샘플 신청 집계 -->
+	<insert id="loadSmplReqDailySum" parameterType="icignal.batch.model.SampleReq">
+	   INSERT 
+	   INTO mrt.ch_smpl_req_daily_sum
+	   (
+	   	 req_dt
+		,mem_cd
+		,smpl_cd
+		,chnl_cd
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{reqDt}   
+	     ,#{memCd}  
+	     ,#{smplCd}  
+	     ,#{chnlCd}
+	     ,#{createBy}
+	     ,#{modifyBy}  
+	   )
+	</insert>
+	
+	
+	<!--  일별 무료샘플 신청 집계 -->
+	<insert id="loadProdSrchSum" parameterType="icignal.batch.model.SampleReq">
+	   INSERT 
+	   INTO mrt.ch_prod_srch_sum
+	   (
+	   	 req_dt
+		,prod_cd
+		,srch_chnl
+		,last_srch_dt
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{reqDt}   
+	     ,#{pordCd}  
+	     ,#{srchChnl}  
+	     ,#{lastSrchDt}
+	     ,#{createBy}
+	     ,#{modifyBy}  
+	   )
+	</insert>
+	
+	
+	
+	
+	
     
 </mapper>
 
