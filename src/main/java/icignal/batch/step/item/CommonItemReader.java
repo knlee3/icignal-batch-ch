@@ -68,7 +68,6 @@ private static final Logger log = LoggerFactory.getLogger(CommonItemReader.class
 	    String   to = "20180722";
 		 
 		 System.out.println("jobParameters: " + jobParameters);
-		 System.out.println("000000000000000000000000000000");
 		 
 		 reader.setParameterValues(new HashMap<String, Object>() {	     
 			{

@@ -32,6 +32,8 @@ public class StoredProcedureCallTasklet implements Tasklet {
 		 
 		JobExecution je = chunkContext.getStepContext().getStepExecution().getJobExecution();
 		String stepName = chunkContext.getStepContext().getStepExecution().getStepName();
+		
+		
 		 
 		log.info("stepName: " + stepName);
 		 
