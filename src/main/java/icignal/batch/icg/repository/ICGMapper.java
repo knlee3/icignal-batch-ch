@@ -1,16 +1,40 @@
 package icignal.batch.icg.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import icignal.batch.model.GradeB2C;
 import icignal.batch.model.MemberB2C;
+import icignal.batch.model.Order;
 import icignal.batch.model.ProductB2C;
+import icignal.batch.model.SampleReq;
+
 
 @Mapper
 public interface ICGMapper {
+	
+	////////// 공통 영역 //////////////////
+	
+	/**
+	 * SETP_ID에 대한 STEP 정보를 가져온다.
+	 * @return
+	 */
+	public Map<String,String> findByStepId(Map<String, Object> map);
+	
+	
+	
+	
+	////////// 공통 영역 //////////////////
+	
+	
+	
+	
+	
+	
     /**
      * B2C 회원마스터 업데이트건 적재
      * @param members
@@ -111,6 +135,79 @@ public interface ICGMapper {
 	
 	
 	
+
+	
+	/**
+	 * 일별 무료샘플 신청 집계 
+	 * @param sampleReq
+	 */
+	public void loadSmplReqDailySum(List<? extends SampleReq> sampleReq);
+
+	
+	/**
+	 * 회원관심상품집계
+	 * @param map
+	 */
+	public void loadProdSrchSum(List<? extends Map<String,?>> map);
+	
+	/**
+	 * 일별 장바구니
+	 * @param map
+	 */
+	public void loadShoppingCartDailySum(List<? extends Map<String,?>> map);
+
+	/**
+	 * 캠페인반응
+	 * @param map
+	 */
+	public void loadCampRespDailySum(List<? extends Map<String,?>> map);
+	
+	/**
+	 * 캠페인구매반응
+	 * @param map
+	 */
+	public void loadCampOrdRespDailySum(List<? extends Map<String,?>> map);
+	
+	
+	/**
+	 * 당월말적립금소멸예정고객
+	 * @param map
+	 */
+	public void loadMonthPntExtncCust(List<? extends Map<String,?>> map);
+
+	
+	/**
+	 * 일별 주문 집계 -> staging table insert
+	 * @param order
+	 */
+	public void insertOrdProdDailySumStg(List<? extends Order> order);
+	
+	
+	/**
+	 * 일별 주문 집계
+	 * @param map
+	 */
+	public void loadOrderProdDailySum(Map<String, Object> map);
+
+
+
+
+
+	
+	            
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	
 	
 	

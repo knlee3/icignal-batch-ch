@@ -1,4 +1,4 @@
-package icignal.batch.grade.extract;
+package icignal.batch.step.item;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;

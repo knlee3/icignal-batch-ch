@@ -21,11 +21,12 @@ public class WebController {
 	
 	@Autowired
 	JobLauncher jobLauncher;
-
+/*
 	@Autowired
 	@Qualifier("jobMember")
 	Job jobMember;
-	
+*/
+/*	
 	@RequestMapping("/runMemberJob")
 	public String handle() throws Exception {
 		Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -37,7 +38,7 @@ public class WebController {
 		}
 		return "Done! Check Console Window for more details";
 	}
-	
+*/
 	
 
 }

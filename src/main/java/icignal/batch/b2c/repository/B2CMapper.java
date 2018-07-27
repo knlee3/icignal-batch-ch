@@ -2,6 +2,7 @@ package icignal.batch.b2c.repository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -46,6 +47,15 @@ public interface B2CMapper {
 	 * @return
 	 */
 	public List<ProductB2C> findProductByUpdDt(HashMap<String, Object> map);
+	
+	
+	/**
+	 * 일별주문집계
+	 * @param map
+	 * @return
+	 */
+	public List<Map<String,Object>> findOrderProdDailySummary(HashMap<String, Object> map);
+	
 	
 	
 	

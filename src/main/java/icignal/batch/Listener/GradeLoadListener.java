@@ -1,7 +1,4 @@
-package icignal.batch.product.load;
-
-import java.util.Arrays;
-import java.util.List;
+package icignal.batch.Listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +8,12 @@ import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 
 import icignal.batch.icg.repository.ICGMapper;
 
-public class ProductLoadListener extends JobExecutionListenerSupport {
-
+public class GradeLoadListener extends JobExecutionListenerSupport {
 	private static final Logger log = LoggerFactory.getLogger( Class.class);
 	
 	private final  ICGMapper mapper;
 	
-	public ProductLoadListener(ICGMapper mapper) {
+	public GradeLoadListener(ICGMapper mapper) {
 		this.mapper = mapper;
 	}
 	

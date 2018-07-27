@@ -1,4 +1,4 @@
-package icignal.batch.product.extract;
+package icignal.batch.step.item;
 
 import java.util.HashMap;
 

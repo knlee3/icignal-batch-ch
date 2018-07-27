@@ -1,58 +1,35 @@
 package icignal.batch.model;
 
-
 import java.sql.Date;
 
-public class Order  extends CommonModel {
-	
-	private String ordDt;
+public class Point  extends CommonModel {
 	
 	private String memCd;
-	private String prodCd;
-	private int    prodCnt;
-	private long    ordAmt;
-	private int    ordCnt;
+	private String extncDt;
+	private int extncPnt;
 	private String createBy;
 	private String modifyBy;
 	private Date createDate;
 	private Date modifyDate;
 	
 	
-	public String getOrdDt() {
-		return ordDt;
-	}
-	public void setOrdDt(String ordDt) {
-		this.ordDt = ordDt;
-	}
 	public String getMemCd() {
 		return memCd;
 	}
 	public void setMemCd(String memCd) {
 		this.memCd = memCd;
 	}
-	public String getProdCd() {
-		return prodCd;
+	public String getExtncDt() {
+		return extncDt;
 	}
-	public void setProdCd(String prodCd) {
-		this.prodCd = prodCd;
+	public void setExtncDt(String extncDt) {
+		this.extncDt = extncDt;
 	}
-	public int getProdCnt() {
-		return prodCnt;
+	public int getExtncPnt() {
+		return extncPnt;
 	}
-	public void setProdCnt(int prodCnt) {
-		this.prodCnt = prodCnt;
-	}
-	public long getOrdAmt() {
-		return ordAmt;
-	}
-	public void setOrdAmt(long ordAmt) {
-		this.ordAmt = ordAmt;
-	}
-	public int getOrdCnt() {
-		return ordCnt;
-	}
-	public void setOrdCnt(int ordCnt) {
-		this.ordCnt = ordCnt;
+	public void setExtncPnt(int extncPnt) {
+		this.extncPnt = extncPnt;
 	}
 	public String getCreateBy() {
 		return createBy;
@@ -79,6 +56,5 @@ public class Order  extends CommonModel {
 		this.modifyDate = modifyDate;
 	}
 
-	
-	
+
 }

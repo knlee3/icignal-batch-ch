@@ -137,6 +137,17 @@
      </select>
      
      
+     <select id="findByStepId" resultType="java.util.Map">
+	     SELECT 
+	     		 rid      as stepRid
+				,step_id  as stepId
+				,step_nm  as stepNm
+				,step_desc as stepDesc
+				,mapper_id as mapperId
+	       FROM batch.batch_step
+	      WHERE step_id =  #{stepId}
+     </select>
+     
      
      
      
@@ -295,19 +306,19 @@
 		call mrt.proc_mem_load(#{pJobExecId})
 	</update>
 	
-	<!--  회원 수신동의정보 일 집계 -->
+	<!-- 회원 수신동의정보 일 집계  -->
 	<update id="summaryMemAgreeDaily" parameterType="long"  statementType = "CALLABLE">
 		call mrt.proc_mem_agree_daily_summary(#{pJobExecId})
 	</update>
-	
-	
-	
+		
 	<!--  일별 주문 집계 -->
-	<insert id="loadOrdProdDailySum" parameterType="icignal.batch.model.Order">
+	<insert id="insertOrdProdDailySumStg" parameterType="java.util.Map">
+	  <!--  truncate table mrt.ch_ord_prod_daily_sum_stg -->
+	   
 	   INSERT 
-	   INTO mrt.ch_ord_prod_daily_sum
+	   INTO mrt.ch_ord_prod_daily_sum_stg
 	   (
-	   	ord_dt
+	   	 ord_dt
 		,mem_cd
 		,prod_cd
 		,prod_cnt
@@ -324,11 +335,26 @@
 	     ,#{prodCnt}
 	     ,#{ordAmt}
 	     ,#{ordCnt}
-	     ,#{createBy}
-	     ,#{modifyBy}  
-	   )
+	     ,'batch_admin'
+	     ,'batch_admin'  
+	   
+	   )<!--  ON DUPLICATE KEY 
+		UPDATE		
+		ord_dt    =   #{ordDt}   
+		,mem_cd   =   #{memCd}   
+		,prod_cd  =   #{prodCd}  
+		,prod_cnt =   #{prodCnt} 
+		,ord_amt  =   #{ordAmt}  
+		,ord_cnt  =   #{ordCnt}  
+		,modify_by = 'batch_admin'
+	    ,modify_date = sysdate() -->
 	</insert>
 	
+	
+	
+	<update id="loadOrderProdDailySum"  parameterType="java.util.Map">
+		call mrt.proc_ord_prod_daily_summary(#{pJobExecId})
+	</update>
 	
 	
 	<!--  일별 무료샘플 신청 집계 -->
@@ -349,38 +375,197 @@
 	     ,#{memCd}  
 	     ,#{smplCd}  
 	     ,#{chnlCd}
-	     ,#{createBy}
-	     ,#{modifyBy}  
-	   )
+	     ,'batch_admin'
+	     ,'batch_admin'
+	   ) ON DUPLICATE KEY 
+		UPDATE		
+		req_dt   = #{reqDt}    
+		,mem_cd  = #{memCd}    
+		,smpl_cd = #{smplCd}   
+		,chnl_cd = #{chnlCd} 
+		,modify_by = 'batch_admin'
+	    ,modify_date = sysdate()
 	</insert>
 	
 	
-	<!--  일별 무료샘플 신청 집계 -->
-	<insert id="loadProdSrchSum" parameterType="icignal.batch.model.SampleReq">
+	
+	<!-- 회원관심상품집계  -->
+	<insert id="loadProdSrchSum" parameterType="java.util.HashMap">
 	   INSERT 
 	   INTO mrt.ch_prod_srch_sum
 	   (
-	   	 req_dt
+	   	 mem_cd
 		,prod_cd
 		,srch_chnl
-		,last_srch_dt
+		,last_srch_dt	   	 
 		,create_by
 		,modify_by
 	   )
 	   VALUES
 	   (
-	      #{reqDt}   
-	     ,#{pordCd}  
-	     ,#{srchChnl}  
+	      #{memCd}
+	     ,#{prodCd}
+	     ,#{srchChnl} 
 	     ,#{lastSrchDt}
-	     ,#{createBy}
-	     ,#{modifyBy}  
+	     ,'batch_admin'
+	     ,'batch_admin'  
 	   )
+	   ON DUPLICATE KEY 
+		UPDATE		
+			 mem_cd = #{memCd}
+			,prod_cd = #{prodCd}
+			,srch_chnl = #{srchChnl}
+			,last_srch_dt = #{lastSrchDt}
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
 	</insert>
 	
+	<!-- 일별 장바구니 -->
+	<insert id="loadShoppingCartDailySum" parameterType="java.util.HashMap">
 	
+	 INSERT 
+	   INTO mrt.ch_shopping_cart_daily_sum
+	   (
+	   	 cart_dt
+		,mem_cd
+		,prod_cd
+		,prod_cnt
+		,cart_amt	   	 
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{cartDt}
+	     ,#{memCd}
+	     ,#{prodCd} 
+	     ,#{prodCnt}
+	     ,#{cartAmt}
+	     ,'batch_admin'
+	     ,'batch_admin' 
+	   )
+	   ON DUPLICATE KEY 
+		UPDATE	
+			 cart_dt = #{cartDt}
+			,mem_cd = #{memCd}
+			,prod_cd = #{prodCd}
+			,prod_cnt = #{prodCnt}
+			,cart_amt = #{cartAmt}
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
+	</insert>
 	
-	
+	<!-- 캠페인 반응 -->
+	<insert id="loadCampRespDailySum" parameterType="java.util.HashMap">
+	 INSERT 
+	   INTO mrt.ch_camp_resp_daily_sum
+	   (
+	   	 resp_dt
+		,mem_cd
+		,cam_id
+		,resp_chnl
+		,resp_loc
+		,resp_cnt	   	 	   	 
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{respDt}
+	     ,#{memCd}
+	     ,#{camId} 
+	     ,#{respChnl}
+	     ,#{respLoc}
+	     ,#{respCnt}
+	     ,'batch_admin'
+	     ,'batch_admin' 
+	   )
+	   ON DUPLICATE KEY 
+		UPDATE	
+			 resp_dt   = #{respDt}
+			 mem_cd    = #{memCd}
+			,cam_id    = #{camId}
+			,resp_chnl = #{respChnl}
+			,resp_loc  = #{respLoc}
+			,resp_cnt  = #{respCnt}
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
+	</insert>
+			
+		
+		
+	<!-- 캠페인 구매 반응 -->
+	<insert id="loadCampOrdRespDailySum" parameterType="java.util.HashMap">
+	 INSERT 
+	   INTO mrt.ch_camp_ord_resp_daily_sum
+	   (
+	   	 resp_dt
+        ,mem_cd
+        ,prod_cd
+        ,cam_id
+        ,resp_chnl
+        ,resp_loc
+        ,resp_cnt
+        ,ord_amt	   		   	 	   	 
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{respDt}
+	     ,#{memCd}
+	     ,#{prodCd}
+	     ,#{camId}
+	     ,#{respChnl}
+	     ,#{respLoc}
+	     ,#{respCnt}
+	     ,#{ordAmt} 	     
+	     ,'batch_admin'
+	     ,'batch_admin' 
+	   )
+	   ON DUPLICATE KEY 
+		UPDATE	
+			 resp_dt   = #{respDt}
+			,mem_cd    = #{memCd}
+			,prod_cd   = #{prodCd}
+			,cam_id    = #{camId}
+			,resp_chnl = #{respChnl}
+			,resp_loc  = #{respLoc}
+			,resp_cnt  = #{respCnt}
+			,ord_amt   = #{ordAmt}			
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
+	</insert>
+				
+		
+	<!-- 당월말적립금소멸예정고객  -->
+	<insert id="loadMonthPntExtncCust" parameterType="java.util.HashMap">
+	 INSERT 
+	   INTO mrt.ch_month_pnt_extnc_cust
+	   (
+	   	 mem_cd
+        ,extnc_dt
+        ,extnc_pnt    	   	 	   	 
+		,create_by
+		,modify_by
+	   )
+	   VALUES
+	   (
+	      #{memCd}
+	     ,#{extncDt}
+	     ,#{extncPnt}
+	     ,'batch_admin'
+	     ,'batch_admin' 
+	   )
+	    ON DUPLICATE KEY 
+		UPDATE
+			 mem_cd    = #{memCd}
+			,extnc_dt   = #{extncDt}
+			,extnc_pnt    = #{extncPnt}
+			,modify_by = 'batch_admin'
+	        ,modify_date = sysdate()
+	</insert>	
+		
 	
     
 </mapper>

@@ -1,4 +1,4 @@
-package icignal.batch.product.extract;
+package icignal.batch.Listener;
 
 import java.util.Arrays;
 import java.util.List;
