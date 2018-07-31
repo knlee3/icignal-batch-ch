@@ -20,12 +20,12 @@
 				,	MAddJoinFrom	as MAddJoinFrom	 
 				,	MAddGender		as MAddGender	 
 				,	MAddBirthday	as MAddBirthday	 
-				,	b.MAddLoginDate	 as MAddLoginDate	 
+				,	b.MAddLoginDate	as MAddLoginDate	 
 				,	MAddJoinDate	as MAddJoinDate	 
 				,	b.MAddModDate	as MAddModDate	 
 			from member_basic a with(nolock)
 			join member_add b on a.memberCode = b.memberCode
-			where b.MAddModDate >= #{from} and b.MAddModDate <  #{to}
+			where b.MAddModDate >= #{startDt} and b.MAddModDate <  #{endDt}
          ]]>
         
         </select>
@@ -40,7 +40,7 @@
 				 ,a.MAgrRegDate  as MAgrRegDate
 			     ,a.MAgrModDate  as MAgrModDate
 			 from MEMBER_OTHER_AGREE a with(nolock)
-			where a.MAgrModDate  >= #{from} and a.MAgrModDate <  #{to}
+			where a.MAgrModDate  >= #{startDt} and a.MAgrModDate <  #{endDt}
          ]]>
         </select>
         
@@ -53,7 +53,7 @@
 				 ,a.PushAgree as PushAgree
 				 ,a.PushAgreeDate	 as PushAgreeDate
 			 from MOBILE_APP_INFO a with(nolock)
-			where a.RegDate  >= #{from} and a.RegDate <  #{to}
+			where a.RegDate  >= #{startDt} and a.RegDate <  #{endDt}
          ]]>
         </select>
         
@@ -66,7 +66,7 @@
 				  ,a.IGradeRegDate
 				  ,a.IGradeModDate
 			 from INFO_GRADE a with(nolock)
-			where a.IGradeModDate  >= #{from} and a.IGradeModDate <  #{to}
+			where a.IGradeModDate  >= #{startDt} and a.IGradeModDate <  #{endDt}
          ]]>
         </select>
         
@@ -85,7 +85,7 @@
 				,a.ProductRegDate
 				,a.ProductModDate
 			 from PRODUCT_BASIC a  with (nolock)
-			where a.ProductModDate  >= #{from} and a.ProductModDate <  #{to}
+			where a.ProductModDate  >= #{startDt} and a.ProductModDate <  #{endDt}
          ]]>
         </select>
         
@@ -94,8 +94,8 @@
  				resultType="java.util.Map">
        			{call dbo.sp_ord_prod_daily_summary
        			 (
-       			    #{from, mode=IN, jdbcType=VARCHAR}
-        		   ,#{to, mode=IN, jdbcType=VARCHAR}
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
         		  )
        			}
         </select>

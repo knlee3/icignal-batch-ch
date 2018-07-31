@@ -7,6 +7,9 @@
     <update id="truncateTable" parameterType="String">
         truncate table ${tableName}
     </update>
+   
+   
+   
     	
     
     
@@ -137,19 +140,36 @@
      </select>
      
      
-     <select id="findByStepId" resultType="java.util.Map">
+     <select id="findStepByStepId" resultType="java.util.Map">
 	     SELECT 
-	     		 rid      as stepRid
-				,step_id  as stepId
-				,step_nm  as stepNm
-				,step_desc as stepDesc
-				,mapper_id as mapperId
+	     		 	rid      as stepRid
+				,	step_id  as stepId
+				,	step_nm  as stepNm
+				,	step_desc as stepDesc
+				,	mapper_id as mapperId
+				,	cond_extr_apply_yn  as condExtrApplyYn
+				,	cond_extr_base_dt	as condExtrBaseDt
+				,	cond_extr_term		as condExtrTerm 
+				,	cond_extr_startDt	as condExtrStartDt
+				,	cond_extr_endDt		as condExtrEndDt
+				,	cond_extr_unit		as condExtrUnit 
+				
 	       FROM batch.batch_step
 	      WHERE step_id =  #{stepId}
      </select>
      
      
-     
+     <update id="updateStepExtrDt" parameterType="java.util.Map">
+         update  batch.batch_step
+            set 
+            	 cond_extr_startDt_before = cond_extr_startDt
+            	,cond_extr_endDt_before = cond_extr_endDt
+            	,cond_extr_startDt = #{condExtrStartDt}
+            	,cond_extr_endDt   = #{condExtrEndDt}
+            	,modify_date = sysdate()  
+            	,modify_by = 'batch_admin'
+	      WHERE step_id =  #{stepId}
+     </update>     
      
      <select id="findAllChProdStg" resultType="icignal.batch.model.ProductB2C">
 	     SELECT 

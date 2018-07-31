@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -43,11 +44,7 @@ import icignal.batch.tasklet.MemberLoadTasklet;
 import icignal.batch.tasklet.StoredProcedureCallTasklet;
 import icignal.batch.tasklet.SumMemAgreeDailyTasklet;
 import icignal.batch.tasklet.TruncateTableTasklet;
-import icignal.batch.Listener.MemberListener;
-import icignal.batch.Listener.MonthPntExtncCustListener;
 import icignal.batch.icg.repository.ICGMapper;
-
-
 
 @Configuration
 @EnableBatchProcessing
@@ -188,15 +185,19 @@ public class BatchConfig {
 	ItemReader<Map<String, Object>> readerB2C;
 	
 	
+	@Autowired
+	CommonStepExecutionListener commonStepExecutionListener;
+	
 	
 	
 	@Bean(name="stepOrderProdDailyExtract")
 	public Step stepOrderProdDailyExtract() throws Exception {
 		
 		// 최근 2주일건 조회로 변경
-		return stepBuilderFactory.get("stepOrderProdDailyExtract").<Map<String,Object>, Map<String,Object>>chunk(1000)		
-				.reader(readerB2C)
-				.writer(new OrderProdDailyItemWriter(sqlSessionFactoryIC).writer())				
+		return stepBuilderFactory.get("stepOrderProdDailyExtract").<Map<String,Object>, Map<String,Object>>chunk(10)
+				.reader(readerB2C)				
+				.writer(new OrderProdDailyItemWriter(sqlSessionFactoryIC).writer())
+				.listener(commonStepExecutionListener)
 				.build();
 	}
 	

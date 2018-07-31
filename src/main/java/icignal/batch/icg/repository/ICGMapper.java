@@ -23,7 +23,7 @@ public interface ICGMapper {
 	 * SETP_ID에 대한 STEP 정보를 가져온다.
 	 * @return
 	 */
-	public Map<String,String> findByStepId(Map<String, Object> map);
+	public Map<String,Object> findStepByStepId(Map<String, Object> map);
 	
 	
 	
@@ -188,6 +188,14 @@ public interface ICGMapper {
 	 * @param map
 	 */
 	public void loadOrderProdDailySum(Map<String, Object> map);
+
+
+
+   /**
+    * batch_step 테이블 추출조건 시작일 및 종료일 업데이트
+    * @param map
+    */
+	public void updateStepExtrDt(Map<String, Object> map);
 
 
 

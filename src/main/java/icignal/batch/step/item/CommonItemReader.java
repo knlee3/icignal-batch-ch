@@ -1,121 +1,105 @@
 package icignal.batch.step.item;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.batch.api.chunk.listener.ItemReadListener;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisCursorItemReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
-import icignal.batch.Listener.MemberListener;
+
+import icignal.batch.icg.repository.ICGMapper;
+import icignal.batch.util.ICNDateUtility;
 
 @Component
 public class CommonItemReader {
 
-private  SqlSessionFactory sqlSessionFactory;
 
 private static final Logger log = LoggerFactory.getLogger(CommonItemReader.class);	
 
-	//@Autowired
-    public CommonItemReader(@Qualifier("sqlSessionFactoryB2C")	SqlSessionFactory sqlSessionFactory) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAA");
-		this.sqlSessionFactory = sqlSessionFactory;
-		
-    	
-    }
-
-
-
-
-/*
-	public CommonItemReader(SqlSessionFactory sqlSessionFactory ) {
-		this.sqlSessionFactory = sqlSessionFactory;
-		
-	}*/
 
 	@StepScope
 	@SuppressWarnings("serial")	
 	@Bean
-	public MyBatisCursorItemReader<Map<String,Object>>  readerB2C(@Value("#{jobParameters}") Map<String,Object> jobParameters
-			) throws Exception {	
-	log.info("aaaaaaaaaaaaaaaaaaaaa!!!!!!!!!!!!!!");
-		 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();
-		 System.out.println("sqlSessionFactoryB2C:"  + sqlSessionFactory);
-		 
-		 
-		 reader.setSqlSessionFactory(sqlSessionFactory);
-		 reader.setQueryId("icignal.batch.b2c.repository.B2CMapper.findOrderProdDailySummary");
-
-		String   from = "20180621";
-	    String   to = "20180722";
-		 
-		 System.out.println("jobParameters: " + jobParameters);
-		 
-		 reader.setParameterValues(new HashMap<String, Object>() {	     
-			{
-				  // for( String key : params.keySet() )  put(key, params.get(key));
-                put("from", from);
-                put("to", to);
-              
-            }
-        });
-		
-		 System.out.println("1111111111111111111aaaaaaaaaaaa");
-		return reader;
+	public MyBatisCursorItemReader<Map<String,Object>>  readerB2C(
+			@Qualifier("sqlSessionFactoryB2C")	SqlSessionFactory sqlSessionFactory,
+			@Qualifier("ICGMapper") ICGMapper mapper,
+			@Value("#{jobParameters}") Map<String,Object> jobParameters,
+			@Value("#{stepExecution.stepName}")  String stepName	) throws Exception {
+		return reader(sqlSessionFactory, mapper, jobParameters, stepName);
 	}
+	
+	
+	@SuppressWarnings("serial")
+	public MyBatisCursorItemReader<Map<String,Object>> reader( SqlSessionFactory sqlSessionFactory, ICGMapper mapper,
+			 													Map<String,Object> jobParameters,	  String stepName ) throws Exception {
+		   log.info("StepName:::: " + stepName);
+		   Map<String, Object> stepInfo = 	mapper.findStepByStepId(  
+													new HashMap<String, Object>() {	     
+														{
+											                put("stepId", stepName);
+											            }
+													} 
+												 );
+			String mapperId = (String)stepInfo.get("mapperId");
+			Date startDt = (Date)stepInfo.get("condExtrStartDt");
+			Date endDt = (Date)stepInfo.get("condExtrEndDt");
 
-/*
-	@Override
-	public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+			log.info("############추출조건 기간##########");
+			log.info(ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ) +" ~ " 
+					 + ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+			log.info("############추출조건 기간##########");
 
-/*
-	@Override
-	public void beforeStep(StepExecution stepExecution) {
-		log.info("beforStep!!!!!!!!!!!!!!");
+
+			log.info("mapperId: " + mapperId);
+		 	
+			
+			 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();
+			 
+			 reader.setSqlSessionFactory(sqlSessionFactory);
+			 reader.setQueryId(mapperId);		
+			 
+			 reader.setParameterValues(new HashMap<String, Object>() {	     
+				{
+					put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
+					put("endDt", ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+	                
+	              
+	            }
+	        });
+			
+			return reader;
 		
-            log.info("CommonItemReader beforeStep...");
-           Map<String, JobParameter >  params = stepExecution.getJobParameters().getParameters();
-           String param_from = (String)params.get("to").getValue();
-           
-           for( String key : params.keySet() ) {
-        	   
-        	  String param_value =  (String)params.get(key).getValue();
-        	  log.info("param_value: " + param_value);
-        	  
-        	  
-        	   //put(key, params.get(key));
-           }
-            
 		
 	}
+	
+	
+	@StepScope
+	@SuppressWarnings("serial")	
+	@Bean
+	public MyBatisCursorItemReader<Map<String,Object>>  readerIC(
+			@Qualifier("sqlSessionFactoryIC")	SqlSessionFactory sqlSessionFactory, 
+			@Qualifier("ICGMapper") ICGMapper mapper,
+			@Value("#{jobParameters}") Map<String,Object> jobParameters,
+			@Value("#{stepExecution.stepName}")  String stepName
+			) throws Exception {
+		return reader(sqlSessionFactory, mapper, jobParameters, stepName);
+	}
+
+	
 
 
-	@Override
-	public ExitStatus afterStep(StepExecution stepExecution) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+
 	
 	
 }

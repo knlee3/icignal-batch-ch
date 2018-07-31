@@ -37,7 +37,7 @@ public class StoredProcedureCallTasklet implements Tasklet {
 		 
 		log.info("stepName: " + stepName);
 		 
-		String mapperId = mapper.findByStepId(  new HashMap<String, Object>() {	     
+		String mapperId = (String)mapper.findStepByStepId(  new HashMap<String, Object>() {	     
 					{
 		                put("stepId", stepName);
 		            }
