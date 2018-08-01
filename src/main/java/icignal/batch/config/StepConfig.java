@@ -70,6 +70,10 @@ public class StepConfig {
 	
 	
 	@Autowired
+	public ItemReader<Map<String, Object>> readerIC;
+	
+	
+	@Autowired
 	CommonStepExecutionListener commonStepExecutionListener;
 
 	/*
@@ -165,6 +169,34 @@ public class StepConfig {
 	
 	
 	
+/*	
+	
+//	@Bean(name="stepProductLoad")
+	public Step stepProductLoad() throws Exception {
+		return stepBuilderFactory.get("stepProductLoad").<ProductB2C, ProductB2C>chunk(1000)		
+				.reader(new ProductLoadItemReader(sqlSessionFactoryIC).read())
+				.writer(new ProductLoadItemWriter(sqlSessionFactoryIC).writer())
+				.build();
+	}
+	
+	*/
+	
+	
+	
+	
+//	@Bean(name="stepProductLoad")
+	public Step stepProductLoad() throws Exception {
+		return stepBuilderFactory.get("stepProductLoad")
+				.<Map<String,Object>, Map<String,Object>>chunk(1000)		
+				.reader(readerIC)
+				.writer(writerIC)
+				.listener(commonStepExecutionListener)
+				.build();
+	}
+	
+	
+	
+	
 
 //	@Bean(name="stepGradeExtract")
 	public Step stepGradeExtract() throws Exception {
@@ -185,17 +217,7 @@ public class StepConfig {
 		
 	
 
-	
-	
-//	@Bean(name="stepProductLoad")
-	public Step stepProductLoad() throws Exception {
-		return stepBuilderFactory.get("stepProductLoad").<ProductB2C, ProductB2C>chunk(1000)		
-				.reader(new ProductLoadItemReader(sqlSessionFactoryIC).read())
-				.writer(new ProductLoadItemWriter(sqlSessionFactoryIC).writer())
-				.build();
-	}
-	
-	
+
 	
 	
 	
