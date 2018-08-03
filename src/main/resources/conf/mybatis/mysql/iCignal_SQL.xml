@@ -4,14 +4,95 @@
 
 <mapper namespace="icignal.batch.icg.repository.ICGMapper">
     
+    <!--  배치잡 공통 영역 시작 -->
+    
     <update id="truncateTable" parameterType="String">
         truncate table ${tableName}
     </update>
    
+      
+     <select id="findJobInfo" resultType="java.util.Map">
+	     SELECT 
+	     		    rid   				as rid
+	     		  , job_nm				as jobNm
+	     		  , job_desc			as jobDesc
+	     		  , use_yn				as useYn
+	     		  , exec_cycle			as execCycle
+	     		  , last_exec_start_dt  as lastExecStartDt 
+	     		  , last_exec_end_dt	as lastExecEndDt 
+	     		  , last_exec_time		as lastExecTime 
+	     		  , result_cd			as resultCd 
+	     		  , msg					as msg
+	       FROM  batch.batch_job a
+	      WHERE 1=1
+	        and a.job_nm  =  #{jobName}
+     </select>
+     
+     
+           
+     <select id="findJobStepInfo" resultType="java.util.Map">
+	     SELECT      		   
+	     		 	rid				as rid
+	     		  , rid_job			as ridJob
+	     		  , step_seq		as stepSeq
+	     		  , step_nm			as stepNm
+	     		  , step_desc		as stepDesc
+	       FROM  batch.batch_job_step a
+	      WHERE 1=1
+	        and a.step_nm  =  #{stepName}
+     </select>
+     
    
+   
+   
+   
+     <select id="findJobStepMapperInfo" resultType="java.util.Map">
+	     SELECT 
+	     		 	b.rid      				as ridStep
+				,	b.step_nm  				as stepNm
+				,	b.step_desc 			as stepDesc
+				,	c.mapper_id 			as mapperId
+				,   c.mapper_param 			as mapperParam
+				,   c.mapper_desc  			as mapperDesc
+				,	c.cond_extr_apply_yn  	as condExtrApplyYn
+				,	c.cond_extr_base_dt		as condExtrBaseDt
+				,	c.cond_extr_term		as condExtrTerm 
+				,	c.cond_extr_startDt		as condExtrStartDt
+				,	c.cond_extr_endDt		as condExtrEndDt
+				,	c.cond_extr_unit		as condExtrUnit
+	       FROM  batch.batch_job a 
+	       join batch.batch_job_step b on a.rid = b.rid_job
+	       join batch.batch_job_step_mapper c on b.rid = c.rid_step	       
+	      WHERE 1=1
+	        and a.job_nm  =  #{jobName}
+	        and b.step_nm =  #{stepName}
+	        and c.item_type = #{itemType}
+     </select>
+     
+     
+     <update id="updateJobStepMapperExtrDt" parameterType="java.util.Map">
+         update  batch.batch_job_step_mapper
+            set 
+            	 cond_extr_startDt_before = cond_extr_startDt
+            	,cond_extr_endDt_before = cond_extr_endDt
+            	,cond_extr_startDt = #{condExtrStartDt}
+            	,cond_extr_endDt   = #{condExtrEndDt}
+            	,modify_date = sysdate()  
+            	,modify_by = 'batch_admin'
+	      WHERE rid_step =  #{ridStep}
+	        and item_type = 'ItemReader' 
+     </update>     
+   
+   
+   
+   <!--  배치잡 공통 영역  끝 -->
    
     	
-    
+    	
+    	
+    	
+    	
+    <!--  천호몰 B2C 마트 영역 시작 -->
     
     <insert id="insertChMemStg" parameterType="icignal.batch.model.MemberB2C">
     INSERT 
@@ -140,36 +221,6 @@
      </select>
      
      
-     <select id="findStepByStepId" resultType="java.util.Map">
-	     SELECT 
-	     		 	rid      as stepRid
-				,	step_id  as stepId
-				,	step_nm  as stepNm
-				,	step_desc as stepDesc
-				,	mapper_id as mapperId
-				,	cond_extr_apply_yn  as condExtrApplyYn
-				,	cond_extr_base_dt	as condExtrBaseDt
-				,	cond_extr_term		as condExtrTerm 
-				,	cond_extr_startDt	as condExtrStartDt
-				,	cond_extr_endDt		as condExtrEndDt
-				,	cond_extr_unit		as condExtrUnit 
-				
-	       FROM batch.batch_step
-	      WHERE step_id =  #{stepId}
-     </select>
-     
-     
-     <update id="updateStepExtrDt" parameterType="java.util.Map">
-         update  batch.batch_step
-            set 
-            	 cond_extr_startDt_before = cond_extr_startDt
-            	,cond_extr_endDt_before = cond_extr_endDt
-            	,cond_extr_startDt = #{condExtrStartDt}
-            	,cond_extr_endDt   = #{condExtrEndDt}
-            	,modify_date = sysdate()  
-            	,modify_by = 'batch_admin'
-	      WHERE step_id =  #{stepId}
-     </update>     
      
      <select id="findAllChProdStg" resultType="icignal.batch.model.ProductB2C">
 	     SELECT 

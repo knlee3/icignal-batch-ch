@@ -19,12 +19,16 @@ public interface ICGMapper {
 	
 	////////// 공통 영역 //////////////////
 	
-	/**
-	 * SETP_ID에 대한 STEP 정보를 가져온다.
-	 * @return
-	 */
-	public Map<String,Object> findStepByStepId(Map<String, Object> map);
+
+	public Map<String,Object> findJobInfo(Map<String, Object> map);
 	
+	public Map<String,Object> findJobStepInfo(Map<String, Object> map);
+	
+	
+	
+	public Map<String,Object> findJobStepMapperInfo(Map<String, Object> map);
+	
+
 	
 	
 	
@@ -195,7 +199,7 @@ public interface ICGMapper {
     * batch_step 테이블 추출조건 시작일 및 종료일 업데이트
     * @param map
     */
-	public void updateStepExtrDt(Map<String, Object> map);
+	public void updateJobStepMapperExtrDt(Map<String, Object> map);
 
 
 

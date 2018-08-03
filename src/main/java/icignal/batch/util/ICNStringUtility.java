@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -1319,10 +1320,47 @@ public class ICNStringUtility {
 		for (int i = 0; i < stringArray.length; i++) {
 			rtnValue += Integer.toBinaryString(stringArray[i]);
 		}
-
+		
 
 		return rtnValue;
 	}
+
+	
+	/**
+	 * 구분자로 구별된 마지막 단어를 가져온다.
+	 * @param str
+	 * @return
+	 */
+	public synchronized final static String getStringOfLastSper(String str, String sper) {
+	//	String rtnValue = "";
+		if(str == null || str.length() == 0) return "";
+		
+		String arry[] = getStringArray(str, sper);
+		
+
+		return arry[arry.length-1];
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		System.out.println("1111111111111111111");
+	//	String  str ="icignal.batch.b2c.repository.B2CMapper.findOrderProdDailySummary";
+		String  str ="mrt.afd,mrt.sdfaml,mrt.sefs";
+	//	System.out.println( str.length());
+	//    System.out.println(getStringOfLastSper(str, "."));
+		
+	    
+	    
+//	    List<String> items = Arrays.asList(str.split("\\s*,\\s*"));
+	    List<String> items = Arrays.asList(str.split(","));
+		for(String item : items) {
+			System.out.println("item:" + item );
+			
+		}
+		
+	}
+
 
 
 

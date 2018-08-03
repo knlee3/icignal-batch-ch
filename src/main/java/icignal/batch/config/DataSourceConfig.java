@@ -4,6 +4,7 @@ package icignal.batch.config;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -42,14 +43,9 @@ public abstract class DataSourceConfig {
 	 * @throws Exception
 	 */
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, String dbType) throws Exception {
-		
-		
     	SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
     	String sqlMapConfigPath = "classpath:/conf/mybatis/" + dbType + "/*_SQL.xml";
-    
     	
-	//	PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-	//	Resource resources = resolver.getResource(sqlMapConfigPath);
 		String dbLog = env.getProperty("jdbc.sql.log");
 		
 		if (dbLog != null && dbLog.toString().toLowerCase().equals("true")) {
@@ -58,13 +54,9 @@ public abstract class DataSourceConfig {
 			factory.setDataSource(dataSource);
 		}
 		
-		
 		factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(sqlMapConfigPath));
 		
-	//	factory.setConfigLocation(resources);		
-//		factory.setMapperLocations(resolver.getResources("classpath:/conf/mybatis/" + dbType + "/sqlMap/**/*.xml")); 
-	//	factory.setMapperLocations(resolver.getResources(sqlMapConfigPath)); 
-	//	factory.afterPropertiesSet();
+	
 		return factory.getObject();
     }
 	
