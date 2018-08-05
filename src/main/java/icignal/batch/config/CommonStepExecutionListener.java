@@ -31,7 +31,7 @@ public class CommonStepExecutionListener extends MapperDao  implements StepExecu
 		String stepName = stepExecution.getStepName();
 	    log.info("jobName: " + jobName + " StempName: " +   stepName + " beforeStep start...");
 	
-	   Map<String, Object>  stepInfo = findStepInfo(jobName, stepName, ITEM_READER);
+	   Map<String, Object>  stepInfo = findJobStepMapperInfo(jobName, stepName, ITEM_READER);
 	   
 	   if(stepInfo != null) {
 		  String condExtrApplyYn = (String)stepInfo.get("condExtrApplyYn");
@@ -65,7 +65,7 @@ public class CommonStepExecutionListener extends MapperDao  implements StepExecu
 		
 		ExitStatus status =  stepExecution.getExitStatus();
 		
-		Map<String, Object> stepInfo = findStepInfo(jobName,stepName, ITEM_READER);
+		Map<String, Object> stepInfo = findJobStepMapperInfo(jobName,stepName, ITEM_READER);
 		
 		if(stepInfo != null &&  ICNStringUtility.isUpperCaseEquals("Y",  (String)stepInfo.get("condExtrApplyYn"))) {
 			updateJobStepMapperExtrDt((String)stepInfo.get("ridStep"), null, null);

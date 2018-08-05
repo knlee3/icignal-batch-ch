@@ -91,13 +91,13 @@ public class StepConfig {
 	
 	//소멸예정고객
 //	@Bean(name="stepMonthPntExtncCust")
-	public Step stepMonthPntExtncCust() throws Exception {
+	/*public Step stepMonthPntExtncCust() throws Exception {
 		return stepBuilderFactory.get("stepMonthPntExtncCust")
 				.<Map<String,?>, Map<String,?>>chunk(1000)		
 				.reader(new MonthPntExtncCustItemReader(sqlSessionFactoryB2C).read())
 				.writer(new MonthPntExtncCustItemWriter(sqlSessionFactoryIC).writer())
 				.build();
-	}
+	}*/
 	
 	
 	/*
@@ -129,7 +129,7 @@ public class StepConfig {
 	
 	
 	//@Bean(name="stepOrderProdDailyExtract")
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public Step stepOrderProdDailyExtract() throws Exception {
 		
 		// 최근 2주일건 조회로 변경
@@ -141,17 +141,17 @@ public class StepConfig {
 			//	.listener(new CommonItemReaderListener("stepOrderProdDailyExtract"))
 				.listener(commonStepExecutionListener)
 				.build();
-	}
+	}*/
 	
 	
 	
 	//@Bean(name="stepOrderProdDailyLoad")
-	public Step stepOrderProdDailyLoad() throws Exception {
+/*	public Step stepOrderProdDailyLoad() throws Exception {
 		// 최근 2주일건 조회로 변경
 		return stepBuilderFactory.get("stepOrderProdDailyLoad")		
 				.tasklet(new StoredProcedureCallTasklet(mapper))
 				.build();
-	}
+	}*/
 	
 	
 	/*
@@ -165,14 +165,14 @@ public class StepConfig {
 	
 	
 //	@Bean(name="stepProductExtract")
-	public Step stepProductExtract() throws Exception {
+	/*public Step stepProductExtract() throws Exception {
 		return stepBuilderFactory.get("stepProductExtract")
 				.<Map<String,Object>, Map<String,Object>>chunk(1000)		
 				.reader(readerB2C)
 				.writer(writerIC)
 				.listener(commonStepExecutionListener)
 				.build();
-	}
+	}*/
 	
 	
 	
@@ -192,34 +192,34 @@ public class StepConfig {
 	
 	
 //	@Bean(name="stepProductLoad")
-	public Step stepProductLoad() throws Exception {
+	/*public Step stepProductLoad() throws Exception {
 		return stepBuilderFactory.get("stepProductLoad")
 				.<Map<String,Object>, Map<String,Object>>chunk(1000)		
 				.reader(readerIC)
 				.writer(writerIC)
 				.listener(commonStepExecutionListener)
 				.build();
-	}
+	}*/
 	
 	
 	
 	
 
 //	@Bean(name="stepGradeExtract")
-	public Step stepGradeExtract() throws Exception {
+	/*public Step stepGradeExtract() throws Exception {
 		return stepBuilderFactory.get("stepGradeExtract").<GradeB2C, GradeB2C>chunk(1000)		
 				.reader(new GradeExtractItemReader(sqlSessionFactoryB2C).read("19800709", "20180717"))
 				.writer(new GradeExtractItemWriter(sqlSessionFactoryIC).writer())
 				.build();
 	}
-	
+	*/
 //	@Bean(name="stepGradeLoad")
-	public Step stepGradeLoad() throws Exception {
+/*	public Step stepGradeLoad() throws Exception {
 		return stepBuilderFactory.get("stepGradeLoad").<GradeB2C, GradeB2C>chunk(1000)		
 				.reader(new GradeLoadItemReader(sqlSessionFactoryIC).read())
 				.writer(new GradeLoadItemWriter(sqlSessionFactoryIC).writer())
 				.build();
-	}
+	}*/
 	
 		
 	
@@ -237,7 +237,7 @@ public class StepConfig {
      * @return
      * @throws Exception
      */
-	public Step stepMemberExtract() throws Exception {
+/*	public Step stepMemberExtract() throws Exception {
 		return stepBuilderFactory
 				.get("stepMemberExtract")
 				.<Map<String,Object>, Map<String,Object>>chunk(1000)
@@ -247,10 +247,9 @@ public class StepConfig {
 				.writer(writerIC)
 				.listener(commonStepExecutionListener)
 				.build();
-	}
+	}*/
 	
-	
-//	@Bean(name="stepMemberOtherAgreeExtract")
+	/*
 	public Step stepMemberOtherAgreeExtract() throws Exception {
 		return stepBuilderFactory
 				.get("stepMemberOtherAgreeExtract")
@@ -263,15 +262,14 @@ public class StepConfig {
 				.listener(commonStepExecutionListener)
 				.build();
 	}
-	
-	
-//	@Bean(name="stepMemberMobileAppInfoExtract")
+	*/
+	/*
 	public Step stepMemberMobileAppInfoExtract() throws Exception {
 		return stepBuilderFactory
 				.get("stepMemberMobileAppInfoExtract")
-				/*.<MemberB2C, MemberB2C>chunk(1000)
+				.<MemberB2C, MemberB2C>chunk(1000)
 				.reader(new MemberItemReader(sqlSessionFactoryB2C).readMemberMobileAppInfo("20180709", "20180710"))
-				.writer(new MemberItemWriter(sqlSessionFactoryIC).writerMemberMobileAppInfo())*/
+				.writer(new MemberItemWriter(sqlSessionFactoryIC).writerMemberMobileAppInfo())
 				.<Map<String,Object>, Map<String,Object>>chunk(1000)
 				.reader(readerB2C)
 				.writer(writerIC)
@@ -279,8 +277,9 @@ public class StepConfig {
 				.build();
 	}
 	
-	
-//	@Bean(name="stepMemberLoad")
+	*/
+    
+    /*
 	public Step stepMemberLoad() throws Exception {
 		return stepBuilderFactory
 				.get("stepMemberLoad")
@@ -288,26 +287,25 @@ public class StepConfig {
 				.tasklet(new StoredProcedureCallTasklet(mapper))
 				.build();
 	}
-	
-	
-//	@Bean(name="stepSumMemAgreeDaily")
+	*/
+	/*
 	public Step stepSumMemAgreeDaily() throws Exception {
 		return stepBuilderFactory
 				.get("stepSumMemAgreeDaily")
 			//	.tasklet(new SumMemAgreeDailyTasklet())
 				.tasklet(new StoredProcedureCallTasklet(mapper))
 				.build();
-	}
+	}*/
 	
 	
-//	
-	public Step stepTruncateTable() throws Exception {
+
+	/*public Step stepTruncateTable() throws Exception {
 		return stepBuilderFactory
 				.get("stepTruncateTable")
 				.tasklet(new TruncateTableTasklet(mapper))
 				.build();
 	}
-	
+	*/
 	
 	
 	public Step stepStoredProcedureCallTasklet( String stepName) {
@@ -322,19 +320,18 @@ public class StepConfig {
 	
 	public Step stepTruncateTableTasklet(String stepName) throws Exception {
 		return stepBuilderFactory
-			//	.get("stepTruncateTable")
 				.get(stepName)
 				.tasklet(new TruncateTableTasklet(mapper))
 				.build();
 	}
 	
 	
-	public Step stepItem(String stepName , ItemReader<Map<String, Object>>  reader, ItemWriter<Map<String, Object>>  writer) throws Exception {
+	public Step stepItem(String stepName 
+						,ItemReader<Map<String, Object>>  reader
+						,ItemWriter<Map<String, Object>>  writer) throws Exception {
 		return stepBuilderFactory
 				.get(stepName)
-				.<Map<String,Object>, Map<String,Object>>chunk(1000)		
-			//	.reader(readerB2C)
-			//	.writer(writerIC)
+				.<Map<String,Object>, Map<String,Object>>chunk(1000)
 				.reader(reader)
 				.writer(writer)
 				.listener(commonStepExecutionListener)

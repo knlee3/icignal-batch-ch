@@ -44,7 +44,7 @@ public class MapperDao  {
     	writer.setSqlSessionFactory(sqlSessionFactory);
     	
     	//writer.setStatementId("icignal.batch.icg.repository.ICGMapper.insertOrdProdDailySumStg");
-    	writer.setStatementId((String)findStepInfo(jobName,stepName, ITEM_WRITER ).get("mapperId"));
+    	writer.setStatementId((String)findJobStepMapperInfo(jobName,stepName, ITEM_WRITER ).get("mapperId"));
     	System.out.println("writer...................end ");
 		 return writer;
     }
@@ -63,7 +63,7 @@ public class MapperDao  {
 		   
 		 //  sqlSessionFactory.openSession(ExecutorType.BATCH);
 		   
-		   Map<String, Object> stepInfo = findStepInfo(jobName,stepName, ITEM_READER);
+		   Map<String, Object> stepInfo = findJobStepMapperInfo(jobName,stepName, ITEM_READER);
 		   
 		   log.debug("stepInfo:: " +  stepInfo);
 		   
@@ -103,7 +103,7 @@ public class MapperDao  {
     
 	
 	public void truncateTable(String jobName, String stepName) {
-		   Map<String, Object> stepInfo =  findStepInfo(jobName, stepName, TRUNC_TASKLET);
+		   Map<String, Object> stepInfo =  findJobStepMapperInfo(jobName, stepName, TRUNC_TASKLET);
 		  String mapperParam = (String)stepInfo.get("mapperParam");
 		  List<String> tableNames = Arrays.asList(mapperParam.split(","));
 		  for(String item : tableNames)  mapper.truncateTable(item);
@@ -111,9 +111,24 @@ public class MapperDao  {
 	
     
     
+	public Map<String, Object> findJobStepInfo(Map<String, Object> map ){
+    	return mapper.findJobStepInfo(map);
+    	/*
+    	 return	mapper.findJobStepInfo(
+					new HashMap<String, Object>() {
+						{
+			                put("jobName", jobName);			              
+			                
+			            }
+					} 
+				 );*/
+    }
+	
+	
+	
     
     @SuppressWarnings("serial")
-	public Map<String, Object> findStepInfo(String jobName, String stepName, String itemType){
+	public Map<String, Object> findJobStepMapperInfo(String jobName, String stepName, String itemType){
     	
     	 return	mapper.findJobStepMapperInfo(
 					new HashMap<String, Object>() {

@@ -25,7 +25,9 @@
 	     		  , msg					as msg
 	       FROM  batch.batch_job a
 	      WHERE 1=1
+	       <if test="jobName != null">
 	        and a.job_nm  =  #{jobName}
+	       </if>
      </select>
      
      
@@ -37,9 +39,15 @@
 	     		  , step_seq		as stepSeq
 	     		  , step_nm			as stepNm
 	     		  , step_desc		as stepDesc
-	       FROM  batch.batch_job_step a
+	       FROM  batch.batch_job a 
+	       join batch.batch_job_step b on a.rid = b.rid_job
 	      WHERE 1=1
+	        and a.job_nm = #{jobName}
+	        <if test="stepName != null">
 	        and a.step_nm  =  #{stepName}
+	        </if>
+	        
+	        
      </select>
      
    

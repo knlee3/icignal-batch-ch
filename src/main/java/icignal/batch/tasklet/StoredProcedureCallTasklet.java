@@ -41,7 +41,7 @@ public class StoredProcedureCallTasklet extends MapperDao implements Tasklet {
 		log.info("stepName: " + stepName);
 
 		
-		String mapperId = (String)findStepInfo(jobName, stepName, SP_TASKLET ).get("mapperId");
+		String mapperId = (String)findJobStepMapperInfo(jobName, stepName, SP_TASKLET ).get("mapperId");
 		mapperId =  ICNStringUtility.getStringOfLastSper(mapperId, ".");
 		
 		log.info("mapperId: " + mapperId);
