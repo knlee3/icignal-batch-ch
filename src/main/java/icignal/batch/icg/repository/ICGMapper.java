@@ -102,19 +102,19 @@ public interface ICGMapper {
 	 * ch_mem_stg 테이블의 데이터 전체를 추출
 	 * @return
 	 */
-	public List<MemberB2C> findAllChMemStg();
+	public List<Map<String, Object>> findAllChMemStg();
 	
 	/**
 	 * ch_grade_stg 테이블의 데이터 전제 추출
 	 * @return
 	 */
-	public List<GradeB2C> findAllChGradeStg();
+	public List<Map<String, Object>> findAllChGradeStg();
 	
 	/**
 	 * ch_prod_stg 테이블의 데이터 전체 추출
 	 * @return
 	 */
-	public List<ProductB2C> findAllChProdStg();
+	public List<Map<String, Object>> findAllChProdStg();
 	
 	
 	//////////////// iciganl 테이블에 로딩  ////////////////////
@@ -123,7 +123,7 @@ public interface ICGMapper {
 	
 	public void loadGrade();
 	
-	public void loadMember(@Param("pJobExecId") long jobExecId);
+	public void loadMember(Map<String, Object> map);
 
 	
 	
@@ -135,7 +135,7 @@ public interface ICGMapper {
 	/**
 	 * 회원 수신동의정보 일 집계  
 	 */
-	public void summaryMemAgreeDaily(@Param("pJobExecId") long jobExecId);
+	public void summaryMemAgreeDaily(Map<String, Object> map);
 	
 	
 	
@@ -145,46 +145,46 @@ public interface ICGMapper {
 	 * 일별 무료샘플 신청 집계 
 	 * @param sampleReq
 	 */
-	public void loadSmplReqDailySum(List<? extends SampleReq> sampleReq);
+	public void loadSmplReqDailySum(Map<String, Object> map);
 
 	
 	/**
 	 * 회원관심상품집계
 	 * @param map
 	 */
-	public void loadProdSrchSum(List<? extends Map<String,?>> map);
+	public void loadProdSrchSum(Map<String, Object> map);
 	
 	/**
 	 * 일별 장바구니
 	 * @param map
 	 */
-	public void loadShoppingCartDailySum(List<? extends Map<String,?>> map);
+	public void loadShoppingCartDailySum(Map<String, Object> map);
 
 	/**
 	 * 캠페인반응
 	 * @param map
 	 */
-	public void loadCampRespDailySum(List<? extends Map<String,?>> map);
+	public void loadCampRespDailySum(Map<String, Object> map);
 	
 	/**
 	 * 캠페인구매반응
 	 * @param map
 	 */
-	public void loadCampOrdRespDailySum(List<? extends Map<String,?>> map);
+	public void loadCampOrdRespDailySum(Map<String, Object> map);
 	
 	
 	/**
 	 * 당월말적립금소멸예정고객
 	 * @param map
 	 */
-	public void loadMonthPntExtncCust(List<? extends Map<String,?>> map);
+	public void loadMonthPntExtncCust(Map<String, Object> map);
 
 	
 	/**
 	 * 일별 주문 집계 -> staging table insert
 	 * @param order
 	 */
-	public void insertOrdProdDailySumStg(List<? extends Order> order);
+	public void insertOrdProdDailySumStg(Map<String, Object> map);
 	
 	
 	/**

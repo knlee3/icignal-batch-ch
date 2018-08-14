@@ -23,6 +23,7 @@
 				,	b.MAddLoginDate	as MAddLoginDate	 
 				,	MAddJoinDate	as MAddJoinDate	 
 				,	b.MAddModDate	as MAddModDate	 
+				,   b.MAddPMcode    as MAddPMcode
 			from member_basic a with(nolock)
 			join member_add b on a.memberCode = b.memberCode
 			where b.MAddModDate >= #{startDt} and b.MAddModDate <  #{endDt}

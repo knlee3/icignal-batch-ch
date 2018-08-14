@@ -35,7 +35,7 @@ public class MapperDao  {
     public MyBatisBatchItemWriter<Map<String,Object>> writer( SqlSessionFactory sqlSessionFactory, 
     		 Map<String,Object> jobParameters,	String jobName, String stepName ) throws Exception {
     
-    	System.out.println("writer...................");
+    	log.info("writer...................");
     	 final  MyBatisBatchItemWriter<Map<String,Object>> writer = new  MyBatisBatchItemWriter<>();
     	 
     	// sqlSessionFactory.openSession().selectOne("commonRepository.now");
@@ -45,7 +45,7 @@ public class MapperDao  {
     	
     	//writer.setStatementId("icignal.batch.icg.repository.ICGMapper.insertOrdProdDailySumStg");
     	writer.setStatementId((String)findJobStepMapperInfo(jobName,stepName, ITEM_WRITER ).get("mapperId"));
-    	System.out.println("writer...................end ");
+    	log.info("writer...................end ");
 		 return writer;
     }
 	

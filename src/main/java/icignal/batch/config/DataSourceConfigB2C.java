@@ -50,19 +50,7 @@ public class DataSourceConfigB2C extends DataSourceConfig {
 		return sqlSessionFactory(dataSource, dbType);
     }
 	
-/*	@Autowired 	
-	@Qualifier("b2cDB") 
-	DataSource dataSource;
-	*/
-/*	
-	 @Bean
-	 public SqlSessionFactoryBean sqlSessionFactoryBean() throws ClassNotFoundException {
-	        final SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-	        sqlSessionFactoryBean.setDataSource(dataSource);
-	        return sqlSessionFactoryBean;
-	 }
-	
-*/
+
 	
 	
 

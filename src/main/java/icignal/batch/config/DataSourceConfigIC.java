@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 
 
 @Configuration
@@ -24,11 +26,31 @@ public class DataSourceConfigIC extends DataSourceConfig {
 	@Autowired
 	protected Environment env;
 	
-	@ConfigurationProperties(prefix="datasource.icignal")
+	@ConfigurationProperties(prefix="datasource.icignal.hikari")
 	@Primary
 	@Bean(name = "icignalDB")
 	public DataSource dataSource(){
-	  return DataSourceBuilder.create().build();
+		com.zaxxer.hikari.HikariDataSource ds = (HikariDataSource) DataSourceBuilder.create().build();
+	   ds.setMaximumPoolSize(20);
+	 //  ds.setConnectionTestQuery("SELECT 1");
+       ds.setLeakDetectionThreshold(100000);
+       ds.setValidationTimeout(1000);
+       ds.setConnectionTimeout(5000);
+	//   ds.setJdbc4ConnectionTest(true);
+       ds.setRegisterMbeans(true);
+       
+	   /*
+	    #datasource.iciganl.testOnBorrow=true
+#datasource.iciganl.validationQuery=SELECT 1
+#datasource.icignal.timeBetweenEvictionRunsMillis=7200000
+#datasource.icignal.testWhileIdle=true
+#datasource.icignal.maximumActiveConnections=5
+#datasource.icignal.maximumIdleConnections=3
+datasource.icignal.initial-size=20
+
+	    */
+	  return ds;
+	  
 	}
 	
 

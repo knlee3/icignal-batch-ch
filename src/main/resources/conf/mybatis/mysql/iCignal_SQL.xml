@@ -122,7 +122,7 @@
 		   ,MAddBirthday
 		   ,MAddLoginDate
 		   ,MAddJoinDate
-		   ,MAddModDate
+		   ,MAddModDate		   
 		   ,create_by
 		   ,modify_by
 		   ,create_date
@@ -230,7 +230,7 @@
      
      
      
-     <select id="findAllChProdStg" resultType="icignal.batch.model.ProductB2C">
+     <select id="findAllChProdStg" resultType="java.util.Map">
 	     SELECT 
 	     		 ProductCode
 			   	,ProductStatus
@@ -244,7 +244,7 @@
      
      
      
-      <insert id="insertChGradeStg" parameterType="icignal.batch.model.GradeB2C">
+      <insert id="insertChGradeStg" parameterType="java.util.Map">
 	    INSERT 
 	      INTO mrt.ch_grade_stg 
 	      ( 
@@ -269,7 +269,7 @@
      </insert>  
      
      
-       <select id="findAllChGradeStg" resultType="icignal.batch.model.GradeB2C">
+       <select id="findAllChGradeStg" resultType="java.util.Map">
 	     SELECT 
 	     		IGradeIDX
 		   	    ,IGradeName
@@ -278,7 +278,7 @@
      
      
      
-     <insert id="loadGrade" parameterType="icignal.batch.model.ProductB2C">
+     <insert id="loadGrade" parameterType="java.util.Map">
         INSERT 
 	      INTO loy.loy_tiers 
 	    ( 
@@ -307,7 +307,7 @@
      
      		
      
-     <insert id="insertChProdStg" parameterType="icignal.batch.model.ProductB2C">
+     <insert id="insertChProdStg" parameterType="java.util.Map">
 	    INSERT 
 	      INTO mrt.ch_prod_stg 
 	      ( 
@@ -339,7 +339,7 @@
 			    );
      </insert>  
      
-     <insert id="loadProduct" parameterType="icignal.batch.model.ProductB2C">
+     <insert id="loadProduct" parameterType="java.util.Map">
      	INSERT 
 	      INTO loy.loy_prod 
 	      ( 
@@ -381,12 +381,12 @@
      <!--  
 	   회원정보 icignal로 로딩
      -->
-     <update id="loadMember" parameterType="long"  statementType = "CALLABLE">
+     <update id="loadMember" parameterType="java.util.Map" >
 		call mrt.proc_mem_load(#{pJobExecId})
 	</update>
 	
 	<!-- 회원 수신동의정보 일 집계  -->
-	<update id="summaryMemAgreeDaily" parameterType="long"  statementType = "CALLABLE">
+	<update id="summaryMemAgreeDaily" parameterType="java.util.Map" >
 		call mrt.proc_mem_agree_daily_summary(#{pJobExecId})
 	</update>
 		
@@ -436,8 +436,54 @@
 	</update>
 	
 	
+	
+	
+	<!-- 
+	회원 마트 집계
+	 -->
+	<update id="summaryMemberMart"  parameterType="java.util.Map">
+		call mrt.proc_mem_mart(#{pJobExecId})
+	</update>
+	
+	<!-- 
+	비구매 관심상품 집계
+	 -->
+	<update id="summaryInterestProdMart"  parameterType="java.util.Map">
+		call mrt.proc_insertest_prod_mart(#{pJobExecId})
+	</update>
+	
+	<!-- 
+	장바구니 마트 집계
+	 -->
+	<update id="summaryShoppingCartMart"  parameterType="java.util.Map">
+		call mrt.proc_shopping_cart_mart(#{pJobExecId})
+	</update>
+	
+	<!-- 
+	상품별 구매 마트 집계
+	 -->
+	<update id="summaryProdudctOrderMart"  parameterType="java.util.Map">
+		call mrt.proc_prod_ord_mart(#{pJobExecId})
+	</update>
+	
+	<!-- 
+	고객유형벌 구매상품 마트 집계
+	 -->
+	<update id="summaryCustTypeProdOrderMart"  parameterType="java.util.Map">
+		call mrt.proc_cust_prod_sum_mart(#{pJobExecId})
+	</update>
+	
+	<!-- 
+	 회원맞춤상품 마트 집계
+	 -->
+	<update id="summaryMemberFitProductMart"  parameterType="java.util.Map">
+		call mrt.proc_fit_prod_mart(#{pJobExecId})
+	</update>
+	
+	
+	
 	<!--  일별 무료샘플 신청 집계 -->
-	<insert id="loadSmplReqDailySum" parameterType="icignal.batch.model.SampleReq">
+	<insert id="loadSmplReqDailySum" parameterType="java.util.Map">
 	   INSERT 
 	   INTO mrt.ch_smpl_req_daily_sum
 	   (
@@ -469,7 +515,7 @@
 	
 	
 	<!-- 회원관심상품집계  -->
-	<insert id="loadProdSrchSum" parameterType="java.util.HashMap">
+	<insert id="loadProdSrchSum" parameterType="java.util.Map">
 	   INSERT 
 	   INTO mrt.ch_prod_srch_sum
 	   (
@@ -500,7 +546,7 @@
 	</insert>
 	
 	<!-- 일별 장바구니 -->
-	<insert id="loadShoppingCartDailySum" parameterType="java.util.HashMap">
+	<insert id="loadShoppingCartDailySum" parameterType="java.util.Map">
 	
 	 INSERT 
 	   INTO mrt.ch_shopping_cart_daily_sum
@@ -535,7 +581,7 @@
 	</insert>
 	
 	<!-- 캠페인 반응 -->
-	<insert id="loadCampRespDailySum" parameterType="java.util.HashMap">
+	<insert id="loadCampRespDailySum" parameterType="java.util.Map">
 	 INSERT 
 	   INTO mrt.ch_camp_resp_daily_sum
 	   (
@@ -574,7 +620,7 @@
 		
 		
 	<!-- 캠페인 구매 반응 -->
-	<insert id="loadCampOrdRespDailySum" parameterType="java.util.HashMap">
+	<insert id="loadCampOrdRespDailySum" parameterType="java.util.Map">
 	 INSERT 
 	   INTO mrt.ch_camp_ord_resp_daily_sum
 	   (
@@ -618,7 +664,7 @@
 				
 		
 	<!-- 당월말적립금소멸예정고객  -->
-	<insert id="loadMonthPntExtncCust" parameterType="java.util.HashMap">
+	<insert id="loadMonthPntExtncCust" parameterType="java.util.Map">
 	 INSERT 
 	   INTO mrt.ch_month_pnt_extnc_cust
 	   (

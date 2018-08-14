@@ -24,7 +24,7 @@ public class SumMemAgreeDailyTasklet  implements Tasklet {
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 		 
 		 JobExecution je = chunkContext.getStepContext().getStepExecution().getJobExecution();
-		 mapper.summaryMemAgreeDaily(je.getId());
+		// mapper.summaryMemAgreeDaily(je.getId());
 		 return RepeatStatus.FINISHED;
 	}
 

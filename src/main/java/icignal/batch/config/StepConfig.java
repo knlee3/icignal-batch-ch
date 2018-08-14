@@ -331,7 +331,7 @@ public class StepConfig {
 						,ItemWriter<Map<String, Object>>  writer) throws Exception {
 		return stepBuilderFactory
 				.get(stepName)
-				.<Map<String,Object>, Map<String,Object>>chunk(1000)
+				.<Map<String,Object>, Map<String,Object>>chunk(10000)
 				.reader(reader)
 				.writer(writer)
 				.listener(commonStepExecutionListener)

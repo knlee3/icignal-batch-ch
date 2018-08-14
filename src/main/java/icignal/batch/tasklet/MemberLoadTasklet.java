@@ -28,7 +28,7 @@ public class MemberLoadTasklet implements Tasklet {
 		JobExecution je = chunkContext.getStepContext().getStepExecution().getJobExecution();
 		//System.out.println("JobExecution: " +je.getId());
 		
-		 mapper.loadMember(je.getId());
+		// mapper.loadMember(je.getId());
 		 return RepeatStatus.FINISHED;
 	}
 
