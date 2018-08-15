@@ -18,35 +18,35 @@ public interface B2CMapper {
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMemberByUpdDt(HashMap<String, Object> map);
+	public List<MemberB2C> findMemberByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C회원 정보이용동의 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMemberOtherAgreeByUpdDt(HashMap<String, Object> map);
+	public List<MemberB2C> findMemberOtherAgreeByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C회원 모바일앱 정보 (푸시수신) 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMobileAppInfoByUpdDt(HashMap<String, Object> map);
+	public List<MemberB2C> findMobileAppInfoByUpdDt(Map<String, Object> map);
 
 	/**
 	 * B2C 등급 정보 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<GradeB2C> findGradeByUpdDt(HashMap<String, Object> map);
+	public List<GradeB2C> findGradeByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C 상품정보 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<ProductB2C> findProductByUpdDt(HashMap<String, Object> map);
+	public List<ProductB2C> findProductByUpdDt(Map<String, Object> map);
 	
 	
 	/**
@@ -54,7 +54,25 @@ public interface B2CMapper {
 	 * @param map
 	 * @return
 	 */
-	public List<Map<String,Object>> findOrderProdDailySummary(HashMap<String, Object> map);
+	public List<Map<String,Object>> findOrderProdDailySummary(Map<String, Object> map);
+	
+	/**
+	 * 일별 장바구니 집계
+	 * @param map
+	 * @return
+	 */
+	public List<Map<String,Object>> findShoppingCartDailySummary(Map<String, Object> map);
+	
+	
+	
+	/**
+	 * 일별 무료샘플신청 집계
+	 * @param map
+	 * @return
+	 */
+	public List<Map<String,Object>> findSampleRequestDailySummary(Map<String, Object> map);
+	
+	
 	
 	
 	

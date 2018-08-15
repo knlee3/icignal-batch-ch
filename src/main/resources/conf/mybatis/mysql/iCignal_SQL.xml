@@ -391,9 +391,7 @@
 	</update>
 		
 	<!--  일별 주문 집계 -->
-	<insert id="insertOrdProdDailySumStg" parameterType="java.util.Map">
-	  <!--  truncate table mrt.ch_ord_prod_daily_sum_stg -->
-	   
+	<insert id="insertOrdProdDailySumStg" parameterType="java.util.Map">	   
 	   INSERT 
 	   INTO mrt.ch_ord_prod_daily_sum_stg
 	   (
@@ -417,16 +415,7 @@
 	     ,'batch_admin'
 	     ,'batch_admin'  
 	   
-	   )<!--  ON DUPLICATE KEY 
-		UPDATE		
-		ord_dt    =   #{ordDt}   
-		,mem_cd   =   #{memCd}   
-		,prod_cd  =   #{prodCd}  
-		,prod_cnt =   #{prodCnt} 
-		,ord_amt  =   #{ordAmt}  
-		,ord_cnt  =   #{ordCnt}  
-		,modify_by = 'batch_admin'
-	    ,modify_date = sysdate() -->
+	   )
 	</insert>
 	
 	

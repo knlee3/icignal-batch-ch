@@ -90,7 +90,7 @@
          ]]>
         </select>
         
-        <!--   일별 회원 주문 집계        -->
+        <!--   일별 회원 주문 집계        -->        
          <select id="findOrderProdDailySummary" parameterType="java.util.Map" 
  				resultType="java.util.Map">
        			{call dbo.sp_ord_prod_daily_summary
@@ -102,11 +102,79 @@
         </select>
         
         
+           <!--   일별 장바구니 집계        -->        
+         <select id="findShoppingCartDailySummary" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_shopping_cart_daily_summary
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
+           <!--   일별 무료샘플 신청 집계        -->        
+         <select id="findSampleRequestDailySummary" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_smpl_req_daily_summary
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
+           <!--   일별 관심상품 신청 집계        -->        
+         <select id="findInterestProductDailySummary" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_prod_srch_summary
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        		
+        	
+         <!-- 일별 캠페인 반응         -->        
+         <select id="findCampainResponseDailySummary" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_camp_resp_daily_summary
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
+                	
+         <!-- 일별 캠페인 구매 반응         -->        
+         <select id="findCampainOrderResponseDailySummary" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_camp_ord_resp_daily_summary
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
+        
+        
+        
          <!--   당월말 적립금 소멸예정 고객 조회      -->
-         <select id="findMonthPntExtncCust" 
+     <!--     <select id="findMonthPntExtncCust" 
  				resultType="java.util.Map">
        			{call dbo.sp_month_pnt_extnc_cust}
-        </select>
+        </select> -->
+        
+        
+        
         
         
         
