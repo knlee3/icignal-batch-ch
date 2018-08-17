@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import icignal.batch.icg.repository.ICGMapper;
 import icignal.batch.util.ICNDateUtility;
+import icignal.batch.util.ICNStringUtility;
 
 
 public class MapperDao  {
@@ -65,39 +66,48 @@ public class MapperDao  {
 		   
 		   Map<String, Object> stepInfo = findJobStepMapperInfo(jobName,stepName, ITEM_READER);
 		   
-		   log.debug("stepInfo:: " +  stepInfo);
+		   log.info("stepInfo:: " +  stepInfo);
 		   
 			String mapperId = (String)stepInfo.get("mapperId");
-			Date startDt = (Date)stepInfo.get("condExtrStartDt");
-			Date endDt = (Date)stepInfo.get("condExtrEndDt");
+			
+			
+			
 
-			log.info("############추출조건 기간##########");
-			log.info(ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ) +" ~ " 
-					 + ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
-			log.info("############추출조건 기간##########");
 
+			
 
 			log.info("mapperId: " + mapperId);
 		 	
 			log.info("sqlSessionFactory: " + sqlSessionFactory);
 			
 			 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();
-			 
-	//		 sqlSessionFactory.openSession(ExecutorType.BATCH);
+ 
 			 
 			 reader.setSqlSessionFactory(sqlSessionFactory);
 			 
-			reader.setQueryId(mapperId);		
-			 
-			 reader.setParameterValues(new HashMap<String, Object>() {	     
-				{
-					put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
-					put("endDt", ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
-	                
-	              
-	            }
-	        });
+			 reader.setQueryId(mapperId);		
 			
+			 
+			 String condExtrApplyYn = (String)stepInfo.get("condExtrApplyYn");
+			 if(ICNStringUtility.isEquals(condExtrApplyYn, "Y") ) {
+			 
+				 Date startDt = (Date)stepInfo.get("condExtrStartDt");
+				 Date endDt = (Date)stepInfo.get("condExtrEndDt");
+				 log.info("############추출조건 기간##########");
+				 log.info(ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ) +" ~ " 
+							 + ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+				log.info("############추출조건 기간##########");
+	
+				 
+				 reader.setParameterValues(new HashMap<String, Object>() {	     
+					{
+						put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
+						put("endDt", ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+		                
+		              
+		            }
+		        });
+			 }
 			return reader;
 	}
     

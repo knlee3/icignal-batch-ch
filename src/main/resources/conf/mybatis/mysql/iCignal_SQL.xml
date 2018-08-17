@@ -128,16 +128,16 @@
 		   ,create_date
 		   ,modify_date
 	) VALUES ( 
-		   #{memberCode}
+		   #{MemberCode}
 		  ,#{MAddPMcode}
-		  ,#{memberType}
-		  ,#{memberStatus}
-		  ,#{memberName}
-		  ,#{memberCellnum}
-		  ,#{memberCellAgree}
-		  ,#{memberEmail}
-		  ,#{memberEmailAgree}
-		  ,#{memberID}
+		  ,#{MemberType}
+		  ,#{MemberStatus}
+		  ,#{MemberName}
+		  ,#{MemberCellnum}
+		  ,#{MemberCellAgree}
+		  ,#{MemberEmail}
+		  ,#{MemberEmailAgree}
+		  ,#{MemberID}
 		  ,#{IGradeIDX}
 		  ,#{MAddJoinFrom}		  
 		  ,#{MAddGender}
@@ -168,7 +168,7 @@
 			   ,create_date
 		   	   ,modify_date
 		) VALUES ( 
-			   #{memberCode}
+			   #{MemberCode}
 			  ,#{MAgrmagazine}
 			  ,#{MAgrRcvCall}
 			  ,#{MAgrPIoffer}
@@ -197,7 +197,7 @@
 		   	   ,create_date
 		   	   ,modify_date
 		) VALUES ( 
-			   #{memberCode}
+			   #{MemberCode}
 			  ,#{PushAgree}
 			  ,#{PushAgreeDate}
 			  ,'batch_admin'
@@ -240,9 +240,7 @@
 				,ProductBrand
 	       FROM mrt.ch_prod_stg
      </select>
-     
-     
-     
+         
      
       <insert id="insertChGradeStg" parameterType="java.util.Map">
 	    INSERT 
@@ -318,20 +316,20 @@
 			,ProductName
 			,ProductBrand
 			,ProductRegDate
-			,ProductModDate
+			,ProductModDate			
 		   	,create_by
 		   	,modify_by
 		   	,create_date
 		   	,modify_date
 		) VALUES ( 
-			   #{productCode}
-			  ,#{productStatus}
-			  ,#{productType}
-			  ,#{productComposition}
-			  ,#{productName}
-			  ,#{productBrand}
-			  ,#{productRegDate}			 
-			  ,#{productModDate}
+			   #{ProductCode}
+			  ,#{ProductStatus}
+			  ,#{ProductType}
+			  ,#{ProductComposition}
+			  ,#{ProductName}
+			  ,#{ProductBrand}
+			  ,#{ProductRegDate}			 
+			  ,#{ProductModDate}
 			  ,'batch_admin'
 			  ,'batch_admin'
 			  , sysdate()
@@ -349,19 +347,21 @@
 			,prod_type
 			,prod_composition
 			,prod_nm
-			,prod_brand		   
+			,prod_brand	
+			,rid_pgm	   
 		   	,create_by
 		   	,modify_by
 		   	,create_date	
 		   	,modify_date	 
 		) VALUES ( 
 		      com.getNewID('A')
-			  ,#{productCode}
-			  ,#{productStatus}
-			  ,#{productType}
-			  ,#{productComposition}
-			  ,#{productName}
-			  ,#{productBrand}
+			  ,#{ProductCode}
+			  ,#{ProductStatus}
+			  ,#{ProductType}
+			  ,#{ProductComposition}
+			  ,#{ProductName}
+			  ,#{ProductBrand}
+			  ,'recId00001'
 			  ,'batch_admin'
 			  ,'batch_admin'
 			  ,sysdate()
@@ -369,11 +369,12 @@
 		)
 		ON DUPLICATE KEY 
 		UPDATE		
-			 status_cd = #{productStatus}
-			,prod_type = #{productType}
-			,prod_composition = #{productComposition}
-			,prod_nm = #{productName}			
-			,prod_brand	= #{productBrand}
+			 status_cd = #{ProductStatus}
+			,prod_type = #{ProductType}
+			,prod_composition = #{ProductComposition}
+			,prod_nm = #{ProductName}			
+			,prod_brand	= #{ProductBrand}
+			,rid_pgm	= 'recId00001'			
 			,modify_by = 'batch_admin'
 	        ,modify_date = sysdate()
      </insert>
@@ -558,7 +559,7 @@
 	     ,'batch_admin'
 	     ,'batch_admin' 
 	   )
-	   ON DUPLICATE KEY 
+	 <!--   ON DUPLICATE KEY 
 		UPDATE	
 			 cart_dt = #{cartDt}
 			,mem_cd = #{memCd}
@@ -566,7 +567,7 @@
 			,prod_cnt = #{prodCnt}
 			,cart_amt = #{cartAmt}
 			,modify_by = 'batch_admin'
-	        ,modify_date = sysdate()
+	        ,modify_date = sysdate() -->
 	</insert>
 	
 	<!-- 캠페인 반응 -->

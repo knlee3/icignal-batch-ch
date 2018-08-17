@@ -31,13 +31,13 @@ public class DataSourceConfigIC extends DataSourceConfig {
 	@Bean(name = "icignalDB")
 	public DataSource dataSource(){
 		com.zaxxer.hikari.HikariDataSource ds = (HikariDataSource) DataSourceBuilder.create().build();
-	   ds.setMaximumPoolSize(20);
+	  // ds.setMaximumPoolSize(20);
 	 //  ds.setConnectionTestQuery("SELECT 1");
-       ds.setLeakDetectionThreshold(100000);
-       ds.setValidationTimeout(1000);
-       ds.setConnectionTimeout(5000);
+     //  ds.setLeakDetectionThreshold(100000);
+     //  ds.setValidationTimeout(1000);
+     //  ds.setConnectionTimeout(5000);
 	//   ds.setJdbc4ConnectionTest(true);
-       ds.setRegisterMbeans(true);
+      // ds.setRegisterMbeans(true);
        
 	   /*
 	    #datasource.iciganl.testOnBorrow=true

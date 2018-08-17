@@ -1,14 +1,9 @@
 package icignal.batch.b2c.repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-
-import icignal.batch.model.GradeB2C;
-import icignal.batch.model.MemberB2C;
-import icignal.batch.model.ProductB2C;
 
 @Mapper
 public interface B2CMapper {
@@ -18,35 +13,35 @@ public interface B2CMapper {
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMemberByUpdDt(Map<String, Object> map);
+	public List<Map<String,Object>> findMemberByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C회원 정보이용동의 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMemberOtherAgreeByUpdDt(Map<String, Object> map);
+	public List<Map<String,Object>> findMemberOtherAgreeByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C회원 모바일앱 정보 (푸시수신) 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<MemberB2C> findMobileAppInfoByUpdDt(Map<String, Object> map);
+	public List<Map<String,Object>> findMobileAppInfoByUpdDt(Map<String, Object> map);
 
 	/**
 	 * B2C 등급 정보 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<GradeB2C> findGradeByUpdDt(Map<String, Object> map);
+	public List<Map<String,Object>> findGradeByUpdDt(Map<String, Object> map);
 	
 	/**
 	 * B2C 상품정보 업데이트건 추출
 	 * @param map
 	 * @return
 	 */
-	public List<ProductB2C> findProductByUpdDt(Map<String, Object> map);
+	public List<Map<String,Object>> findProductByUpdDt(Map<String, Object> map);
 	
 	
 	/**

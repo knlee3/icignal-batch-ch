@@ -144,77 +144,69 @@ public class JobConfig {
 	
 
 	
-	
-/*	@Bean(name="jobProduct")
+/*	
+	@Bean(name="jobProduct")
 	public Job jobProduct() throws Exception {
 		Job job = jobBuilderFactory.get("jobProduct")
 								   .incrementer(new RunIdIncrementer())
-//								   .start(stepConfig.stepTruncateTable("mrt.ch_prod_stg"))
-//								   .next(stepConfig.stepProductExtract())
-//								   .next(stepConfig.stepProductLoad())
 								   .start(stepConfig.stepTruncateTableTasklet("stepProductJobTruncTable"))
 								   .next(stepConfig.stepItem("stepProductExtract", readerB2C, writerIC))
-								   .next(stepConfig.stepStoredProcedureCallTasklet("stepProductLoad"))								   
+								   .next(stepConfig.stepItem("stepProductLoad", readerIC, writerIC))								   
 								   .build();
-		return job;
-	}
-	*/
-	
-	
-	/*
-	 //등급
-	@Bean(name="jobGrade")
-	public Job jobGrade() throws Exception {
-		Job job = jobBuilderFactory.get("jobGrade")
-								   .incrementer(new RunIdIncrementer())
-								// .listener(new GradeExtractListener(mapper)) // mrt.ch_grade_stg								   
-								// .start(stepGradeExtract())	
-								// .next(stepGradeLoad())
-                                // .start(stepConfig.stepTruncateTableTasklet("mrt.ch_grade_stg"))
-                                 
-								   .start(stepConfig.stepTruncateTableTasklet("stepGradeJobTruncTable"))
-								   .next(stepConfig.stepItem("stepGradeExtract", readerB2C, writerIC))
-								   .next(stepConfig.stepItem("stepGradeLoad", readerIC, writerIC))
-								   
-								 //  .next(stepConfig.stepStoredProcedureCallTasklet("stepGradeLoad"))		
-								 
-								   .build();
-		return job;
-	}
-	*/
-	
-/*	
-   // 회원수신동의 집계
-	@Bean(name="jobSumMemAgreeDaily")
-	public Job jobSumMemAgreeDaily() throws Exception {
-		Job job = jobBuilderFactory
-				.get("jobSumMemAgreeDaily")
-				.incrementer(new RunIdIncrementer())
-				.start(stepConfig.stepStoredProcedureCallTasklet("stepSummaryMemberAgreeDailyMart"))
-				.build();
 		return job;
 	}
 */
 	
 	
+/*		
+	 //등급
+	@Bean(name="jobGrade")
+	public Job jobGrade() throws Exception {
+		Job job = jobBuilderFactory.get("jobGrade")
+								   .incrementer(new RunIdIncrementer())
+								   .start(stepConfig.stepTruncateTableTasklet("stepGradeJobTruncTable"))
+								   .next(stepConfig.stepItem("stepGradeExtract", readerB2C, writerIC))
+								   .next(stepConfig.stepItem("stepGradeLoad", readerIC, writerIC))
+								   .build();
+		return job;
+	}
+	
+	*/
+	
+	
+/*
+    // 회원수신동의 집계
+	@Bean(name="jobMeberAgreeSumMrt")
+	public Job jobMeberAgreeSumMrt() throws Exception {
+		Job job = jobBuilderFactory
+				.get("jobMeberAgreeSumMrt")
+				.incrementer(new RunIdIncrementer())
+				.start(stepConfig.stepStoredProcedureCallTasklet("stepSummaryMemberAgreeDailyMart"))
+				.build();
+		return job;
+	}
+
+	*/
 	
 	
 	/*
+	
 	 //일별 장바구니 (FromB2C)
 	@Bean(name="jobShoppingCartDailyFromB2C")
 	public Job jobShoppingCartDailyFromB2C() throws Exception {
 		Job job = jobBuilderFactory.get("jobShoppingCartDailyFromB2C")
 								   .incrementer(new RunIdIncrementer())
-								   .start(stepConfig.stepItem("stepShoppingCartDaily", readerB2C, writerIC))
+								   .start(stepConfig.stepTruncateTableTasklet("stepShoppingCartDailyTruncateTable"))
+								   .next(stepConfig.stepItem("stepShoppingCartDaily", readerB2C, writerIC))
 								   .build();
 		return job;
 	}
+	
 	*/
 	
 	
 	
-	
-	/*
+/*	
 	 //일별무료샘플신청 (FromB2C)
 	@Bean(name="jobSampleReqDailyFromB2C")
 	public Job jobSampleReqDailyFromB2C() throws Exception {
@@ -224,9 +216,9 @@ public class JobConfig {
 								   .build();
 		return job;
 	}
+	
+	
 	*/
-	
-	
 	
 	/*
 	 //일별회원관심상품 (FromB2C)
@@ -238,12 +230,12 @@ public class JobConfig {
 								   .build();
 		return job;
 	}
-	*/
 	
+	*/
 
 	
 	
-	/*
+/*	
 	 //캠페인반응 (FromB2C)
 	@Bean(name="jobCampResposeFromB2C")
 	public Job jobCampResposeFromB2C() throws Exception {
@@ -253,13 +245,13 @@ public class JobConfig {
 								   .build();
 		return job;
 	}
+	
 	*/
 	
 	
 	
-	
-	
 	/*
+	
 	 //캠페인구매반응 (FromB2C)
 	@Bean(name="jobCampOrdResponseFromB2C")
 	public Job jobCampOrdResponseFromB2C() throws Exception {
@@ -269,9 +261,9 @@ public class JobConfig {
 								   .build();
 		return job;
 	}
-	*/
-
 	
+
+	*/
 	
 	
 	
@@ -315,7 +307,7 @@ public class JobConfig {
 	 * @return
 	 * @throws Exception
 	 */
-	/*	@Bean(name="jobMemberFitProdMrt")
+/*	@Bean(name="jobMemberFitProdMrt")
 	public Job jobMemberFitProdMrt() throws Exception {
 		Job job = jobBuilderFactory
 				.get("jobMemberFitProdMrt")
@@ -323,8 +315,8 @@ public class JobConfig {
 				.start(stepConfig.stepStoredProcedureCallTasklet("stepSummaryFitProdMart"))
 				.build();
 		return job;
-	}
-	 */
+	}*/
+	 
 	
 	
 	/**
@@ -332,8 +324,8 @@ public class JobConfig {
 	 * @return
 	 * @throws Exception
 	 */
-	/*	@Bean(name="jobInterestProdMartMrt")
-	public Job jobProdSrchMrt() throws Exception {
+/*	@Bean(name="jobInterestProdMartMrt")
+	public Job jobInterestProdMartMrt() throws Exception {
 		Job job = jobBuilderFactory
 				.get("jobInterestProdMartMrt")
 				.incrementer(new RunIdIncrementer())
@@ -341,7 +333,7 @@ public class JobConfig {
 				.build();
 		return job;
 	}
-	 */
+*/
 	
 	
 	
@@ -353,7 +345,7 @@ public class JobConfig {
 	 * @return
 	 * @throws Exception
 	 */
-	/*	@Bean(name="jobCustProdSumMrt")
+	/*@Bean(name="jobCustProdSumMrt")
 	public Job jobCustProdSumMrt() throws Exception {
 		Job job = jobBuilderFactory
 				.get("jobCustProdSumMrt")
@@ -362,7 +354,7 @@ public class JobConfig {
 				.build();
 		return job;
 	}
-	 */
+	*/
 	
 	
 	
@@ -371,7 +363,7 @@ public class JobConfig {
 	 * @return
 	 * @throws Exception
 	 */
-	/*	@Bean(name="jobProdOrdMrt")
+	/*@Bean(name="jobProdOrdMrt")
 	public Job jobProdOrdMrt() throws Exception {
 		Job job = jobBuilderFactory
 				.get("jobProdOrdMrt")
@@ -379,8 +371,8 @@ public class JobConfig {
 				.start(stepConfig.stepStoredProcedureCallTasklet("stepSummaryProdOrdMart"))
 				.build();
 		return job;
-	}
-	 */
+	}*/
+	
 	
 	
 	

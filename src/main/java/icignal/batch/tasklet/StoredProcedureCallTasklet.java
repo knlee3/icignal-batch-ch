@@ -12,7 +12,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
-import icignal.batch.Listener.MemberListener;
+
 import icignal.batch.icg.repository.ICGMapper;
 import icignal.batch.step.item.MapperDao;
 import icignal.batch.util.ICNStringUtility;
@@ -20,7 +20,7 @@ import icignal.batch.util.ICNStringUtility;
 
 public class StoredProcedureCallTasklet extends MapperDao implements Tasklet {
 
-	private static final Logger log = LoggerFactory.getLogger(MemberListener.class);
+	private static final Logger log = LoggerFactory.getLogger(StoredProcedureCallTasklet.class);
 //	private final  ICGMapper mapper;
 	
 	
@@ -37,9 +37,13 @@ public class StoredProcedureCallTasklet extends MapperDao implements Tasklet {
 		JobExecution je = chunkContext.getStepContext().getStepExecution().getJobExecution();
 		String jobName =  je.getJobInstance().getJobName();
 		String stepName = chunkContext.getStepContext().getStepExecution().getStepName();
-		 
+		
+		log.info("jobName: " + jobName);
 		log.info("stepName: " + stepName);
+		log.info("SP_TASKLET: " + SP_TASKLET);
 
+		System.out.println(findJobStepMapperInfo(jobName, stepName, SP_TASKLET ));
+		
 		
 		String mapperId = (String)findJobStepMapperInfo(jobName, stepName, SP_TASKLET ).get("mapperId");
 		mapperId =  ICNStringUtility.getStringOfLastSper(mapperId, ".");

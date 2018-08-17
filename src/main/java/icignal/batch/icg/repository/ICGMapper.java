@@ -1,17 +1,11 @@
 package icignal.batch.icg.repository;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import icignal.batch.model.GradeB2C;
-import icignal.batch.model.MemberB2C;
-import icignal.batch.model.Order;
-import icignal.batch.model.ProductB2C;
-import icignal.batch.model.SampleReq;
 
 
 @Mapper
@@ -43,32 +37,32 @@ public interface ICGMapper {
      * B2C 회원마스터 업데이트건 적재
      * @param members
      */
-	public void insertChMemStg(List<? extends MemberB2C> members);
+	public void insertChMemStg(List<Map<String,Object>> members);
 
 	/**
 	 * B2C 회원 정보이용 동의 업데이트건 적재
 	 * @param members
 	 */
-	public void insertChMemOtherAgreeStg(List<? extends MemberB2C> members);
+	public void insertChMemOtherAgreeStg(List<Map<String,Object>> members);
 	
 	/**
 	 * B2C 회원 모바일정보 (푸시동의) 업데이트건 적재
 	 * @param members
 	 */
-	public void insertChMobileAppInfoStg(List<? extends MemberB2C> members);
+	public void insertChMobileAppInfoStg(List<Map<String,Object>> members);
 
 	
 	/**
 	 * B2C 등급정보 업데이트건 적재
 	 * @param members
 	 */
-	public void insertChGradeStg(List<? extends GradeB2C> members);
+	public void insertChGradeStg(List<Map<String,Object>> members);
 
 	/**
 	 * B2C 상품정보 업데이트건 적재
 	 * @param members
 	 */
-	public void insertChProdStg(List<? extends ProductB2C> members);
+	public void insertChProdStg(List<Map<String,Object>> members);
 
 	
 		
@@ -138,6 +132,13 @@ public interface ICGMapper {
 	public void summaryMemAgreeDaily(Map<String, Object> map);
 	
 	
+	/**
+	 * 비구매관심상품 마트
+	 * @param map
+	 */
+	public void summaryInterestProdMart(Map<String, Object> map);
+	
+	
 	
 
 	
@@ -160,6 +161,8 @@ public interface ICGMapper {
 	 */
 	public void loadShoppingCartDailySum(Map<String, Object> map);
 
+	
+	
 	/**
 	 * 캠페인반응
 	 * @param map
@@ -194,6 +197,34 @@ public interface ICGMapper {
 	public void loadOrderProdDailySum(Map<String, Object> map);
 
 
+	/**
+	 * 장바구니 마트
+	 * @param map
+	 */
+	public void summaryShoppingCartMart(Map<String, Object> map);
+	
+	
+	/**
+	 * 맞춤상품 마트
+	 * @param map
+	 */
+	public void summaryMemberFitProductMart(Map<String, Object> map);
+	
+	/**
+	 * 고객유형별상품주문마트
+	 * @param map
+	 */
+	public void summaryCustTypeProdOrderMart(Map<String, Object> map);
+	
+	/**
+	 * 상품구매 마트
+	 * @param map
+	 */
+	public void summaryProdudctOrderMart(Map<String, Object> map);
+	
+		
+	
+	
 
    /**
     * batch_step 테이블 추출조건 시작일 및 종료일 업데이트

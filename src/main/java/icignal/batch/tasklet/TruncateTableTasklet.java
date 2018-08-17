@@ -9,13 +9,13 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import icignal.batch.Listener.MemberListener;
+
 import icignal.batch.icg.repository.ICGMapper;
 import icignal.batch.step.item.MapperDao;
 
 public class TruncateTableTasklet extends MapperDao implements Tasklet {
 	
-	private static final Logger log = LoggerFactory.getLogger(MemberListener.class);
+	private static final Logger log = LoggerFactory.getLogger(TruncateTableTasklet.class);
 
 	
 	public TruncateTableTasklet(ICGMapper mapper) {

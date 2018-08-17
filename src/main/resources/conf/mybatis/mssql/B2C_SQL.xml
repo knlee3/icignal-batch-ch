@@ -4,7 +4,7 @@
 
 <mapper namespace="icignal.batch.b2c.repository.B2CMapper">
     
-        <select id="findMemberByUpdDt" resultType="icignal.batch.model.MemberB2C">
+     <!--    <select id="findMemberByUpdDt" resultType="icignal.batch.model.MemberB2C">
         <![CDATA[
         	select   
 					a.MemberCode	as memberCode					 
@@ -29,7 +29,21 @@
 			where b.MAddModDate >= #{startDt} and b.MAddModDate <  #{endDt}
          ]]>
         
+        </select> -->
+        
+        <!-- 회원 정보 -->
+        <select id="findMemberByUpdDt" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_member_info
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
         </select>
+        
+        
+        <!-- 
         
        <select id="findMemberOtherAgreeByUpdDt" resultType="icignal.batch.model.MemberB2C">
         <![CDATA[
@@ -45,8 +59,22 @@
          ]]>
         </select>
         
+         -->
         
-  
+        <select id="findMemberOtherAgreeByUpdDt" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_member_other_agree
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
+        
+        
+<!--   
 		<select id="findMobileAppInfoByUpdDt" resultType="icignal.batch.model.MemberB2C">
         <![CDATA[
 			select  
@@ -57,38 +85,48 @@
 			where a.RegDate  >= #{startDt} and a.RegDate <  #{endDt}
          ]]>
         </select>
-        
-        
-        <select id="findGradeByUpdDt" resultType="icignal.batch.model.GradeB2C">
-        <![CDATA[
-			select  
-				   a.IGradeIDX
-				  ,a.IGradeName
-				  ,a.IGradeRegDate
-				  ,a.IGradeModDate
-			 from INFO_GRADE a with(nolock)
-			where a.IGradeModDate  >= #{startDt} and a.IGradeModDate <  #{endDt}
-         ]]>
+         -->
+         
+        <select id="findMobileAppInfoByUpdDt" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_mobile_app_info
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
         </select>
         
         
         
         
-        <select id="findProductByUpdDt" resultType="icignal.batch.model.ProductB2C">
-        <![CDATA[
-			select  
-				 ProductCode
-				,a.ProductStatus
-				,a.ProductType
-				,a.ProductComposition
-				,a.ProductName
-				,a.ProductBrand
-				,a.ProductRegDate
-				,a.ProductModDate
-			 from PRODUCT_BASIC a  with (nolock)
-			where a.ProductModDate  >= #{startDt} and a.ProductModDate <  #{endDt}
-         ]]>
+        
+        
+        
+        <!-- 등급 마스터 -->
+        <select id="findGradeByUpdDt" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_grade
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
         </select>
+        
+        
+         <!-- 상품 마스터 -->
+         <select id="findProductByUpdDt" parameterType="java.util.Map" 
+ 				resultType="java.util.Map">
+       			{call dbo.sp_product
+       			 (
+       			    #{startDt, mode=IN, jdbcType=VARCHAR}
+        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
+        		  )
+       			}
+        </select>
+        
+        
         
         <!--   일별 회원 주문 집계        -->        
          <select id="findOrderProdDailySummary" parameterType="java.util.Map" 
@@ -105,12 +143,7 @@
            <!--   일별 장바구니 집계        -->        
          <select id="findShoppingCartDailySummary" parameterType="java.util.Map" 
  				resultType="java.util.Map">
-       			{call dbo.sp_shopping_cart_daily_summary
-       			 (
-       			    #{startDt, mode=IN, jdbcType=VARCHAR}
-        		   ,#{endDt, mode=IN, jdbcType=VARCHAR}
-        		  )
-       			}
+       			{call dbo.sp_shopping_cart_daily_summary }
         </select>
         
         
