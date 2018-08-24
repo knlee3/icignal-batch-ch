@@ -119,26 +119,17 @@ public class JobConfig {
 	 * 회원정보 적재
 	 * @return
 	 * @throws Exception 
-	 */
-	
+	 */	
 	@Bean(name="jobMember")
 	public Job jobMember() throws Exception {
 		Job job = jobBuilderFactory.get("jobMember")
 								   .incrementer(new RunIdIncrementer())
-								//   .listener(new MemberListener(mapper))
-//								   .start(stepConfig.stepTruncateTable("mrt.ch_mem_stg,mrt.ch_mem_other_agree_stg,mrt.ch_mobile_app_info_stg"))
-//								   .start(stepConfig.stepTruncateTable())
-//								   .next(stepConfig.stepMemberExtract())
-//								   .next(stepConfig.stepMemberOtherAgreeExtract())
-//								   .next(stepConfig.stepMemberMobileAppInfoExtract())
-//								   .next(stepConfig.stepMemberLoad())
-								   
 								   .start(stepConfig.stepTruncateTableTasklet("stepMemberJobTruncTable"))
 								   .next(stepConfig.stepItem("stepMemberExtract", readerB2C, writerIC))
 								   .next(stepConfig.stepItem("stepMemberOtherAgreeExtract", readerB2C, writerIC)) 
 								   .next(stepConfig.stepItem("stepMemberMobileAppInfoExtract", readerB2C, writerIC)) 
 								   .next(stepConfig.stepStoredProcedureCallTasklet("stepMemberLoad"))
-								   .build();		
+								   .build();
 		return job;
 	}
 	

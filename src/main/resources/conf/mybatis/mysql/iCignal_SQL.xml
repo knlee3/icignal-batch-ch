@@ -102,7 +102,7 @@
     	
     <!--  천호몰 B2C 마트 영역 시작 -->
     
-    <insert id="insertChMemStg" parameterType="icignal.batch.model.MemberB2C">
+    <insert id="insertChMemStg" parameterType="java.util.Map">
     INSERT 
       INTO mrt.ch_mem_stg 
       ( 
@@ -153,7 +153,7 @@
 		    );
      </insert>  
      
-     <insert id="insertChMemOtherAgreeStg" parameterType="icignal.batch.model.MemberB2C">
+     <insert id="insertChMemOtherAgreeStg" parameterType="java.util.Map">
 	    INSERT 
 	      INTO mrt.ch_mem_other_agree_stg 
 	      ( 
@@ -185,7 +185,7 @@
      
      
      
-     <insert id="insertChMobileAppInfoStg" parameterType="icignal.batch.model.MemberB2C">
+     <insert id="insertChMobileAppInfoStg" parameterType="java.util.Map">
 	    INSERT 
 	      INTO mrt.ch_mobile_app_info_stg 
 	      ( 
