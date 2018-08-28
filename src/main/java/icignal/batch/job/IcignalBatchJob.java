@@ -1,13 +1,8 @@
-package icignal.batch.config;
-
-
+package icignal.batch.job;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
@@ -15,20 +10,24 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+
+
+
+import icignal.batch.config.StepConfig;
+
+
 
 @Configuration
-@EnableBatchProcessing
-public class JobConfig {
-
-	@Autowired
+public class IcignalBatchJob {
+	
+	
+//	@Autowired
 	public JobBuilderFactory jobBuilderFactory;
 		
 	@Autowired
 	public StepConfig stepConfig;
-	
-	
-	private static final Logger log = LoggerFactory.getLogger(JobConfig.class);
-	
 	
 	@Autowired
 	public ItemWriter<Map<String,Object>> writerIC;
@@ -40,6 +39,16 @@ public class JobConfig {
 	
 	@Autowired
 	public ItemReader<Map<String, Object>> readerIC;
+	
+	
+   @Autowired
+    public IcignalBatchJob(JobBuilderFactory jobBuilderFactory ) {
+        this.jobBuilderFactory = jobBuilderFactory;
+    }
+
+
+	
+
 /*	
 	@SuppressWarnings({ "serial", "unchecked" })
 	@Bean(name="jobCommon")
@@ -75,10 +84,10 @@ public class JobConfig {
 	*/
 	
 	
-	private Object stepCall(Map<String, Object> jobStep) {
+	/*private Object stepCall(Map<String, Object> jobStep) {
 		
 		return null;
-	}
+	}*/
 
 
 	
@@ -132,24 +141,31 @@ public class JobConfig {
 								   .build();
 		return job;
 	}
+
+	
+	/* 1:초(Seconds), 2:분(Minutes),  3:시(Hours), 4:일(Day-of-Month), 5:월(Months), 6:요일(Days-of-Week), 7:연도(Year) - optional  */
+	 
+    @Bean
+    public CronTriggerFactoryBean jobMemberTrigger() throws Exception {
+        return BatchHelper.cronTriggerFactoryBeanBuilder()
+                .cronExpression("0 0/1 * 1/1 * ? *")
+//                .cronExpression("*/30 * * * * ? *")
+                .jobDetailFactoryBean(jobMemberJobDetail())
+                .build();
+    }
+
+    @Bean
+    public JobDetailFactoryBean jobMemberJobDetail() throws Exception   {
+        return BatchHelper.jobDetailFactoryBeanBuilder()
+                .job(jobMember())
+                .build();
+    }
+	
 	
 
 	
-/*	
-	@Bean(name="jobProduct")
-	public Job jobProduct() throws Exception {
-		Job job = jobBuilderFactory.get("jobProduct")
-								   .incrementer(new RunIdIncrementer())
-								   .start(stepConfig.stepTruncateTableTasklet("stepProductJobTruncTable"))
-								   .next(stepConfig.stepItem("stepProductExtract", readerB2C, writerIC))
-								   .next(stepConfig.stepItem("stepProductLoad", readerIC, writerIC))								   
-								   .build();
-		return job;
-	}
-*/
-	
-	
-/*		
+
+		
 	 //등급
 	@Bean(name="jobGrade")
 	public Job jobGrade() throws Exception {
@@ -162,7 +178,38 @@ public class JobConfig {
 		return job;
 	}
 	
+	
+	  @Bean
+	  public CronTriggerFactoryBean jobGradeTrigger() throws Exception {
+	        return BatchHelper.cronTriggerFactoryBeanBuilder()
+	                .cronExpression("0 0/1 * 1/1 * ? *")
+	                .jobDetailFactoryBean(jobGradeJobDetail())
+	                .build();
+	  }
+
+	  @Bean
+	  public JobDetailFactoryBean jobGradeJobDetail() throws Exception   {
+	       return BatchHelper.jobDetailFactoryBeanBuilder()
+	                .job(jobGrade())
+	                .build();
+	  }
+	
+	  
+	  /*	
+		@Bean(name="jobProduct")
+		public Job jobProduct() throws Exception {
+			Job job = jobBuilderFactory.get("jobProduct")
+									   .incrementer(new RunIdIncrementer())
+									   .start(stepConfig.stepTruncateTableTasklet("stepProductJobTruncTable"))
+									   .next(stepConfig.stepItem("stepProductExtract", readerB2C, writerIC))
+									   .next(stepConfig.stepItem("stepProductLoad", readerIC, writerIC))								   
+									   .build();
+			return job;
+		}
 	*/
+		
+		
+	  
 	
 	
 /*
@@ -363,12 +410,6 @@ public class JobConfig {
 				.build();
 		return job;
 	}*/
-	
-	
-	
-	
-	
-	
 	
 	
 	

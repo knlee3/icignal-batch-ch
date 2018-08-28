@@ -14,7 +14,7 @@ public interface ICGMapper {
 	////////// 공통 영역 //////////////////
 	
 
-	public Map<String,Object> findJobInfo(Map<String, Object> map);
+	public List<Map<String,Object>> findJobInfo(Map<String, Object> map);
 	
 	public Map<String,Object> findJobStepInfo(Map<String, Object> map);
 	
