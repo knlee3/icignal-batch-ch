@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.ExecutorType;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
 import org.mybatis.spring.batch.MyBatisCursorItemReader;
@@ -35,18 +35,10 @@ public class MapperDao  {
 	
     public MyBatisBatchItemWriter<Map<String,Object>> writer( SqlSessionFactory sqlSessionFactory, 
     		 Map<String,Object> jobParameters,	String jobName, String stepName ) throws Exception {
-    
-    	log.info("writer...................");
-    	 final  MyBatisBatchItemWriter<Map<String,Object>> writer = new  MyBatisBatchItemWriter<>();
-    	 
-    	// sqlSessionFactory.openSession().selectOne("commonRepository.now");
-
-    	 
+        final  MyBatisBatchItemWriter<Map<String,Object>> writer = new  MyBatisBatchItemWriter<>();
     	writer.setSqlSessionFactory(sqlSessionFactory);
-    	
-    	//writer.setStatementId("icignal.batch.icg.repository.ICGMapper.insertOrdProdDailySumStg");
     	writer.setStatementId((String)findJobStepMapperInfo(jobName,stepName, ITEM_WRITER ).get("mapperId"));
-    	log.info("writer...................end ");
+    	
 		 return writer;
     }
 	
@@ -58,35 +50,15 @@ public class MapperDao  {
 			 													String jobName,
 			 													String stepName ) throws Exception {
 		
-		   log.info("reader..............................!!!");
-		   log.info("jobName:::: " + jobName);
-		   log.info("StepName:::: " + stepName);
-		   
-		 //  sqlSessionFactory.openSession(ExecutorType.BATCH);
-		   
 		   Map<String, Object> stepInfo = findJobStepMapperInfo(jobName,stepName, ITEM_READER);
-		   
 		   log.info("stepInfo:: " +  stepInfo);
-		   
-			String mapperId = (String)stepInfo.get("mapperId");
-			
-			
-			
-
-
-			
+			String mapperId = (String)stepInfo.get("mapperId");			
 
 			log.info("mapperId: " + mapperId);
 		 	
-			log.info("sqlSessionFactory: " + sqlSessionFactory);
-			
-			 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();
- 
-			 
+			 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();			 
 			 reader.setSqlSessionFactory(sqlSessionFactory);
-			 
-			 reader.setQueryId(mapperId);		
-			
+			 reader.setQueryId(mapperId);
 			 
 			 String condExtrApplyYn = (String)stepInfo.get("condExtrApplyYn");
 			 if(ICNStringUtility.isEquals(condExtrApplyYn, "Y") ) {
@@ -97,8 +69,7 @@ public class MapperDao  {
 				 log.info(ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ) +" ~ " 
 							 + ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
 				log.info("############추출조건 기간##########");
-	
-				 
+				
 				 reader.setParameterValues(new HashMap<String, Object>() {	     
 					{
 						put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
@@ -112,6 +83,46 @@ public class MapperDao  {
 	}
     
 	
+
+	@SuppressWarnings("serial")
+	public MyBatisCursorItemReader<Map<String,Object>> reader( SqlSessionFactory sqlSessionFactory, 
+			 													String jobName,
+			 													String stepName ) throws Exception {
+		
+		   Map<String, Object> stepInfo = findJobStepMapperInfo(jobName,stepName, ITEM_READER);
+		   log.info("stepInfo:: " +  stepInfo);
+			String mapperId = (String)stepInfo.get("mapperId");			
+
+			log.info("mapperId: " + mapperId);
+		 	
+			 final MyBatisCursorItemReader<Map<String,Object>> reader = new MyBatisCursorItemReader<>();			 
+			 reader.setSqlSessionFactory(sqlSessionFactory);
+			 reader.setQueryId(mapperId);
+			 
+			 String condExtrApplyYn = (String)stepInfo.get("condExtrApplyYn");
+			 if(ICNStringUtility.isEquals(condExtrApplyYn, "Y") ) {
+			 
+				 Date startDt = (Date)stepInfo.get("condExtrStartDt");
+				 Date endDt = (Date)stepInfo.get("condExtrEndDt");
+				 log.info("############추출조건 기간##########");
+				 log.info(ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ) +" ~ " 
+							 + ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+				log.info("############추출조건 기간##########");
+				
+				 reader.setParameterValues(new HashMap<String, Object>() {	     
+					{
+						put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
+						put("endDt", ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
+		                
+		              
+		            }
+		        });
+			 }
+			return reader;
+	}
+    
+	
+	
 	public void truncateTable(String jobName, String stepName) {
 		   Map<String, Object> stepInfo =  findJobStepMapperInfo(jobName, stepName, TRUNC_TASKLET);
 		  String mapperParam = (String)stepInfo.get("mapperParam");
@@ -121,18 +132,12 @@ public class MapperDao  {
 	
     
     
-	public Map<String, Object> findJobStepInfo(Map<String, Object> map ){
+	public List<Map<String, Object>> findJobStepInfo(Map<String, Object> map ){
     	return mapper.findJobStepInfo(map);
-    	/*
-    	 return	mapper.findJobStepInfo(
-					new HashMap<String, Object>() {
-						{
-			                put("jobName", jobName);			              
-			                
-			            }
-					} 
-				 );*/
     }
+	
+	
+
 	
 	
 	
@@ -166,12 +171,4 @@ public class MapperDao  {
     
     }
     
-    
-    
-    
-    
-    
-    
-	
-	
 }

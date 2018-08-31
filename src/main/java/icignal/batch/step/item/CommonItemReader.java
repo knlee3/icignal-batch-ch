@@ -1,11 +1,7 @@
 package icignal.batch.step.item;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.batch.api.chunk.listener.ItemReadListener;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisCursorItemReader;
@@ -13,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +17,13 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class CommonItemReader  extends MapperDao{
+public class CommonItemReader {  
+//extends MapperDao {
 
 
 	private static final Logger log = LoggerFactory.getLogger(CommonItemReader.class);	
 
+	@Autowired MapperDao dao;
 
 	@StepScope
 	@Bean
@@ -35,7 +34,7 @@ public class CommonItemReader  extends MapperDao{
 		
 			) throws Exception {
 		
-		return reader(sqlSessionFactory,  jobParameters, stepExecution.getJobExecution().getJobInstance().getJobName(), stepExecution.getStepName());
+		return dao.reader(sqlSessionFactory,  jobParameters, stepExecution.getJobExecution().getJobInstance().getJobName(), stepExecution.getStepName());
 	}
 	
 	
@@ -49,7 +48,7 @@ public class CommonItemReader  extends MapperDao{
 			@Value("#{stepExecution}")  StepExecution stepExecution	
 			) throws Exception {
 		
-		return reader(sqlSessionFactory,  jobParameters, stepExecution.getJobExecution().getJobInstance().getJobName(), stepExecution.getStepName());
+		return dao.reader(sqlSessionFactory,  jobParameters, stepExecution.getJobExecution().getJobInstance().getJobName(), stepExecution.getStepName());
 	}
 
 	

@@ -5,6 +5,7 @@ package icignal.batch.config;
 
 import icignal.batch.config.properties.QuartzProperties;
 
+import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
@@ -14,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.SmartLifecycle;
@@ -50,13 +49,10 @@ public class BatchConfiguration {
      * @return JobRegistry BeanPostProcessor
      */
 	 @Bean
-	 public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
-	System.out.println("####jobRegistryBeanPostProcessor start................");
-		 
-	  JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-	  jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
-	  System.out.println("####jobRegistryBeanPostProcessor end................");
-	  return jobRegistryBeanPostProcessor;
+	 public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {		 
+		 JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
+	  	 jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
+	     return jobRegistryBeanPostProcessor;
 	 }
 	 
 	
@@ -93,6 +89,7 @@ public class BatchConfiguration {
 	    												 QuartzProperties quartzProperties, 
 	    												 JobFactory jobFactory, 
 	    												 Trigger[] registryTrigger) throws Exception {
+	    	
 	        SchedulerFactoryBean factory = new SchedulerFactoryBean();
 
 	        factory.setSchedulerName("icignal-batch-scheduler");
@@ -108,10 +105,12 @@ public class BatchConfiguration {
 	        //Schedule 관리를 Spring Datasource 에 위임
 	        factory.setDataSource(datasource);
 	        //Register Triggers
-	        factory.setTriggers(registryTrigger);
-
+	        factory.setTriggers(registryTrigger);	        
 	        return factory;
 	    }
+	    
+	    
+	 
 	    
 
 	    /**

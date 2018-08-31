@@ -16,7 +16,10 @@ public interface ICGMapper {
 
 	public List<Map<String,Object>> findJobInfo(Map<String, Object> map);
 	
-	public Map<String,Object> findJobStepInfo(Map<String, Object> map);
+	
+	
+	public List<Map<String,Object>> findJobStepInfo(Map<String, Object> map);
+	
 	
 	
 	

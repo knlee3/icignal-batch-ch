@@ -175,6 +175,7 @@ public class BatchHelper {
 	     */
 	    public static class CronTriggerFactoryBeanBuilder {
 	        private String name;
+	        private String group;
 	        private String cronExpression;
 	        private JobDetailFactoryBean jobDetailFactoryBean;
 
@@ -186,6 +187,17 @@ public class BatchHelper {
 	            this.name = name;
 	            return this;
 	        }
+	        
+	        /**
+	         * 작성되지 않으면, bean Name 을 사용
+	         * @see CronTriggerFactoryBean#setName(String) 
+	         */
+	        public CronTriggerFactoryBeanBuilder group(String group) {
+	            this.group = group;
+	            return this;
+	        }
+
+	        
 
 	        /**
 	         * @param cronExpression Quartz 전용 Cron 양식의 Expression 
@@ -209,7 +221,8 @@ public class BatchHelper {
 	                throw new RuntimeException("cronExpression and jobDetailFactoryBean is required.");
 	            }
 	            CronTriggerFactoryBean cronTriggerFactoryBean = new CronTriggerFactoryBean();
-	            cronTriggerFactoryBean.setName(this.name);
+	            cronTriggerFactoryBean.setName(this.name);	            
+	            cronTriggerFactoryBean.setGroup(this.group);
 	            cronTriggerFactoryBean.setJobDetail(this.jobDetailFactoryBean.getObject());
 	            cronTriggerFactoryBean.setCronExpression(this.cronExpression);
 	            return cronTriggerFactoryBean;

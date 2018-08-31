@@ -8,7 +8,7 @@ import icignal.batch.step.item.MapperDao;
 
 
 
-public class CommonItemReaderListener extends MapperDao implements ItemReadListener<Object> {
+public class CommonItemReaderListener implements ItemReadListener<Object> {
 	
 	private static final Logger log = LoggerFactory.getLogger(CommonStepExecutionListener.class);
 	

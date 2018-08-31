@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,6 @@ public class StepConfig {
 	
 	public Step stepStoredProcedureCallTasklet( String stepName) {
 		return stepBuilderFactory
-				//.get("stepSumMemAgreeDaily")
 				.get(stepName)
 				.tasklet(new StoredProcedureCallTasklet(mapper))
 				.build();
@@ -118,7 +118,7 @@ public class StepConfig {
 						,ItemWriter<Map<String, Object>>  writer) throws Exception {
 		return stepBuilderFactory
 				.get(stepName)
-				.<Map<String,Object>, Map<String,Object>>chunk(10000)
+				.<Map<String,Object>, Map<String,Object>>chunk(1000)
 				.reader(reader)
 				.writer(writer)
 				.listener(commonStepExecutionListener)
@@ -126,7 +126,7 @@ public class StepConfig {
 	}
 	
 	
-	
+
 	
 	
 }

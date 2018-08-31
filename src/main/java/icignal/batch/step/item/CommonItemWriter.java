@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +17,11 @@ import org.springframework.stereotype.Component;
 import icignal.batch.icg.repository.ICGMapper;
 
 @Component
-public class CommonItemWriter extends MapperDao{
+public class CommonItemWriter  { //extends MapperDao{
 
 	private static final Logger log = LoggerFactory.getLogger(CommonItemWriter.class);	
 
-	
+	@Autowired MapperDao dao;
 	
     @Bean    
     @StepScope
@@ -34,7 +35,7 @@ public class CommonItemWriter extends MapperDao{
     	String jobName = stepExecution.getJobExecution().getJobInstance().getJobName();
 		String stepName = stepExecution.getStepName();
 			
-		return writer(sqlSessionFactory, jobParameters, jobName, stepName );
+		return dao.writer(sqlSessionFactory, jobParameters, jobName, stepName );
 	}
     
     

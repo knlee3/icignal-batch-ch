@@ -9,19 +9,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import icignal.batch.icg.repository.ICGMapper;
+
 import icignal.batch.step.item.MapperDao;
 import icignal.batch.util.ICNDateUtility;
 import icignal.batch.util.ICNStringUtility;
+
+
 @Component
 public class CommonStepExecutionListener extends MapperDao  implements StepExecutionListener{
 
 	private static final Logger log = LoggerFactory.getLogger(CommonStepExecutionListener.class);
 	
-	@Autowired ICGMapper mapper;
+	// @Autowired ICGMapper mapper;
 	
 	@SuppressWarnings("serial")
 	@Override
