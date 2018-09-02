@@ -1,41 +1,20 @@
 package icignal.batch.job;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.mybatis.spring.batch.MyBatisCursorItemReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-
-
-
 import icignal.batch.config.StepConfig;
 import icignal.batch.icg.repository.ICGMapper;
-import icignal.batch.step.item.CommonItemReader;
-import icignal.batch.step.item.CommonItemWriter;
-import icignal.batch.util.ICNStringUtility;
-
-
 
 @Configuration
 public class IcignalBatchJob extends IcignalBatchCommonJob {
@@ -43,23 +22,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 	private static final Logger log = LoggerFactory.getLogger(IcignalBatchJob.class);	
 	
-	//public JobBuilderFactory jobBuilderFactory;
-		
-/*	// @Autowired
-	public StepConfig stepConfig;
-	
-//	@Autowired
-	public ItemWriter<Map<String,Object>> writerIC;
-	
-	
-//	@Autowired
-	public ItemReader<Map<String, Object>> readerB2C;
-	
-	
-	// @Autowired
-	public ItemReader<Map<String, Object>> readerIC;
-	
-	*/
+
     @Autowired
     public IcignalBatchJob(JobBuilderFactory jobBuilderFactory,  StepConfig stepConfig, 
     		ItemReader<Map<String, Object>> readerB2C,
@@ -78,47 +41,6 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 
 
 	
-
-/*	
-	@SuppressWarnings({ "serial", "unchecked" })
-	@Bean(name="jobCommon")
-	public Job jobCommon() throws Exception {
-		Job job = null;
-		String jobName = "jobOrderProdDaily";
-		JobBuilder jobBuilder = jobBuilderFactory.get(jobName);
-		jobBuilder =  jobBuilder.incrementer(new RunIdIncrementer());
-		SimpleJobBuilder sjb =  null;
-		//jobBuilder.start(flow)
-		
-		MapperDao mapper = new MapperDao();
-		List<Map<String,Object>> jobStepList =	(List<Map<String, Object>>) mapper.findJobStepInfo(
-													new HashMap<String, Object>() {
-														{
-											                put("jobName", jobName);
-											            }
-														} );
-		
-		for(Map<String, Object> jobStep : jobStepList) {
-		  int stepSeq =	(int)jobStep.get("stepSeq");
-		 // String stepNm = (String)jobStep.get("stepNm");
-		  if(stepSeq == 1)  sjb = jobBuilder.start((Step) stepCall(jobStep));
-		  else sjb.next((Step)stepCall(jobStep));
-			
-		}
-		
-		sjb.build();
-
-		
-		return job;
-	}
-	*/
-	
-	
-	/*private Object stepCall(Map<String, Object> jobStep) {
-		
-		return null;
-	}*/
-
 
 	
 	/*    
@@ -178,115 +100,8 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	}
 
 
-	/*
-	public Job callSimpleJobProc(String jobName) throws Exception {
-		
-		  JobBuilder jobBuilder = jobBuilderFactory.get(jobName).incrementer(new RunIdIncrementer());
-		  
-		  List<Map<String, Object>> stepInfoList = findJobStepInfo(jobName); 
-		  
-		  SimpleJobBuilder  sjb = null;
-		  try {
-			  for(Map<String, Object> step : stepInfoList) {
-				  Step stepObj = null;
-				  int seq =	(int)step.get("stepSeq");
-					
-				  String stepMethodNm  =	(String)step.get("stepMethodNm");
-				  String stepNm  =	(String)step.get("stepNm");
-				  System.out.println("stepMethodNm: " + stepMethodNm + "\t" + "stepNm: " + stepNm );
-				  String itemReaderNm  =	(String)step.get("itemReaderNm");
-			      String itemWriterNm  =	(String)step.get("itemWriterNm");
-			      String stepClassFieldNm  =	(String)step.get("stepClassFieldNm");
-				  
-			      if(ICNStringUtility.isNotEmptyAll(itemReaderNm, itemWriterNm)) {
-			    	  Method method = this.getClass().getField(stepClassFieldNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
-						stepObj = (Step)method.invoke( this.getClass().getField(stepClassFieldNm).get(this) , stepNm, 
-								this.getClass().getField(itemReaderNm).get(this),
-								this.getClass().getField(itemWriterNm).get(this) );
-			    	  
-			      }else {
-			    	  Method method = this.getClass().getField(stepClassFieldNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
-						//	stepObj = (Step)method.invoke( stepConfig , stepNm );
-							stepObj = (Step)method.invoke( this.getClass().getField(stepClassFieldNm).get(this) , stepNm );
-			    	  
-			      }
-			      
-				if(seq == 1)	sjb = jobBuilder.start(stepObj); 
-				else sjb = sjb.next(stepObj);
-				
-			  }
-		  }catch (Exception e) {
-				e.printStackTrace();
-				throw e;
-			}
-			return	   sjb.build();
-	}
-	
-	*/
 	
 	
-	
-//	@SuppressWarnings({ "unchecked"})	
-	/*public Job callJob(String jobName)  throws Exception {
-		System.out.println("callJob.......................start");
-		
-//	    JobBuilder jobBuilder =	 jobBuilderFactory.get("jobMember").incrementer(new RunIdIncrementer());
-	    JobBuilder jobBuilder =	 jobBuilderFactory.get(jobName).incrementer(new RunIdIncrementer());
-		List<Map<String, Object>> stepInfoList = findJobStepInfo(jobName); 
-		
-		System.out.println("stepInfoList.size(): " + stepInfoList.size());
-		SimpleJobBuilder  sjb  = null;
-		try {
-		for(Map<String, Object> step : stepInfoList) {
-		
-			int seq =	(int)step.get("stepSeq");
-			
-				String stepMethodNm  =	(String)step.get("stepMethodNm");
-			System.out.println("stepMethodNm: " + stepMethodNm);	
-				
-				String stepNm  =	(String)step.get("stepNm");
-				
-				Step stepObj  = null;
-			
-				if(ICNStringUtility.isEquals(stepMethodNm, "stepItem") ) {
-					System.out.println("aaaaaaaaaaaaaaaaaaa!!!!");
-					String itemReaderNm  =	(String)step.get("itemReaderNm");
-					String itemWriterNm  =	(String)step.get("itemWriterNm");
-					System.out.println("itemReaderNm: " + itemReaderNm);
-					System.out.println("itemWriterNm: " + itemWriterNm);
-					ItemReader<Map<String, Object>> itemReader = (ItemReader<Map<String, Object>>)appContext.getBean(itemReaderNm);
-					System.out.println("itemReader: " + itemReader);
-					ItemWriter<Map<String, Object>> itemWriter = (ItemWriter<Map<String, Object>>)appContext.getBean(itemWriterNm);
-					System.out.println("itemWriter: " + itemWriter);
-					
-					
-					stepObj = stepConfig.stepItem(stepNm, readerB2C, writerIC); 
-//					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm, readerB2C.getClass(), writerIC.getClass() );
-				//	Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm, CommonItemReader.class, CommonItemWriter.class );
-			//		System.out.println("method:::::::::: " + method);
-					
-			//		stepObj = (Step)method.invoke( stepConfig, stepNm , "",  "");
-				}else {
-					System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbb!!!");
-					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm,  String.class);
-					System.out.println("method::: " + method);
-					stepObj = (Step)method.invoke( stepConfig , stepNm );
-					System.out.println("stepObj: " + stepObj);
-				}
-				
-				if(seq == 1)	sjb = jobBuilder.start(stepObj);
-				else sjb = sjb.next(stepObj);
-	    
-		}
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-		System.out.println("callJob.......................end");
-	   
-		return sjb.build();
-		
-	}*/
 	
 	
 	/* 1:초(Seconds), 2:분(Minutes),  3:시(Hours), 4:일(Day-of-Month), 5:월(Months), 6:요일(Days-of-Week), 7:연도(Year) - optional  */
@@ -328,18 +143,12 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	}
 	
 	
-
-	
-	
-	
-	
 	
 	  @Bean
 	  public CronTriggerFactoryBean jobGradeTrigger() throws Exception {
 		  Map<String, Object>  jobInfo = findJobInfo("jobGrade");
 		  String jobName = (String)jobInfo.get("jobNm");
 		  String execCycle = (String)jobInfo.get("execCycle");
-
 		  
 	        return BatchHelper.cronTriggerFactoryBeanBuilder()
 //	                .cronExpression("0 0/1 * 1/1 * ? *")
