@@ -126,6 +126,19 @@ public class StepConfig {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	public Step stepItem(String stepName 
+						,Object reader
+						,Object  writer) throws Exception {
+		return stepBuilderFactory
+				.get(stepName)
+				.<Map<String,Object>, Map<String,Object>>chunk(1000)
+				.reader((ItemReader<Map<String, Object>>)reader)
+				.writer((ItemWriter<Map<String, Object>>)writer)
+				.listener(commonStepExecutionListener)
+				.build();
+	}
+	
 
 	
 	

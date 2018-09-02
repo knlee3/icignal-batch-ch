@@ -1,5 +1,6 @@
 package icignal.batch.job;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -185,11 +186,26 @@ public class IcignalBatchJob {
 		  SimpleJobBuilder  sjb = null;
 		  try {
 			  for(Map<String, Object> step : stepInfoList) {
-				  sjb = jobBuilder.start(stepConfig.stepTruncateTableTasklet("stepMemberJobTruncTable"));		  		  
-				  sjb.next(stepConfig.stepItem("stepMemberExtract", readerB2C, writerIC));	      
-				  sjb.next(stepConfig.stepItem("stepMemberOtherAgreeExtract", readerB2C, writerIC));	 
-				  sjb.next(stepConfig.stepItem("stepMemberMobileAppInfoExtract", readerB2C, writerIC)); 
-				  sjb = sjb.next(stepConfig.stepStoredProcedureCallTasklet("stepMemberLoad"));
+				  Step stepObj = null;
+					int seq =	(int)step.get("stepSeq");
+					
+				  String stepMethodNm  =	(String)step.get("stepMethodNm");
+				  String stepNm  =	(String)step.get("stepNm");
+				  System.out.println("stepMethodNm: " + stepMethodNm + "\t" + "stepNm: " + stepNm );
+				  if(ICNStringUtility.isEquals(stepMethodNm, "stepItem") ) {
+				//	stepObj =  stepConfig.stepItem(stepNm, this.getClass().getField((String)step.get("itemReaderNm")).get(this), this.getClass().getField((String)step.get("itemWriterNm")).get(this));
+					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm, String.class, Object.class, Object.class);
+					stepObj = (Step)method.invoke( stepConfig , stepNm, this.getClass().getField((String)step.get("itemReaderNm")).get(this), this.getClass().getField((String)step.get("itemWriterNm")).get(this) );
+				  }else {				  
+					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm,  String.class);
+					stepObj = (Step)method.invoke( stepConfig , stepNm );
+
+				  }
+			  
+			  
+				if(seq == 1)	sjb = jobBuilder.start(stepObj); 
+				else sjb = sjb.next(stepObj);
+				
 			  }
 		  }catch (Exception e) {
 				e.printStackTrace();
@@ -197,6 +213,10 @@ public class IcignalBatchJob {
 			}
 			return	   sjb.build();
 	}
+	
+	
+	
+	
 	
 	@SuppressWarnings({ "unchecked"})	
 	public Job callJob(String jobName)  throws Exception {
