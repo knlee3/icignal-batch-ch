@@ -38,14 +38,14 @@ import icignal.batch.util.ICNStringUtility;
 
 
 @Configuration
-public class IcignalBatchJob {
+public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 	
 	private static final Logger log = LoggerFactory.getLogger(IcignalBatchJob.class);	
 	
-	public JobBuilderFactory jobBuilderFactory;
+	//public JobBuilderFactory jobBuilderFactory;
 		
-	// @Autowired
+/*	// @Autowired
 	public StepConfig stepConfig;
 	
 //	@Autowired
@@ -56,17 +56,23 @@ public class IcignalBatchJob {
 	public ItemReader<Map<String, Object>> readerB2C;
 	
 	
-	@Autowired
+	// @Autowired
 	public ItemReader<Map<String, Object>> readerIC;
 	
-	
+	*/
     @Autowired
-    public IcignalBatchJob(JobBuilderFactory jobBuilderFactory,  StepConfig stepConfig, ItemReader<Map<String, Object>> readerB2C,
-    		ItemWriter<Map<String,Object>> writerIC ) {
-        this.jobBuilderFactory = jobBuilderFactory;
-        this.readerB2C = readerB2C;
-        this.writerIC = writerIC;
-        this.stepConfig = stepConfig;
+    public IcignalBatchJob(JobBuilderFactory jobBuilderFactory,  StepConfig stepConfig, 
+    		ItemReader<Map<String, Object>> readerB2C,
+    		ItemReader<Map<String, Object>> readerIC,
+    		ItemWriter<Map<String,Object>> writerIC,
+    		ICGMapper mapper
+    		) {
+        super.jobBuilderFactory = jobBuilderFactory;
+        super.readerB2C = readerB2C;
+        super.readerIC = readerIC;
+        super.writerIC = writerIC;
+        super.stepConfig = stepConfig;
+        super.mapper = mapper;
         
     }
 
@@ -147,9 +153,7 @@ public class IcignalBatchJob {
 	}
 	*/
 
-    @Autowired
-    private ApplicationContext appContext;
-	
+
 	/**
 	 * 회원정보 적재
 	 * @return
@@ -158,8 +162,7 @@ public class IcignalBatchJob {
 	@Bean(name="jobMember")	
 	public Job jobMember() throws Exception {
 		
-	  Job job =	callJobProc("jobMember");
-//	  System.out.println("job::::::::::::: " + job);
+	  Job job =	callSimpleJobProc("jobMember");
 	/*	
 	Job	job = jobBuilderFactory.get("jobMember")
 								   .incrementer(new RunIdIncrementer())
@@ -172,14 +175,11 @@ public class IcignalBatchJob {
 		return job;
 	  
 
-	  
-
 	}
 
 
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Job callJobProc(String jobName) throws Exception {
+	/*
+	public Job callSimpleJobProc(String jobName) throws Exception {
 		
 		  JobBuilder jobBuilder = jobBuilderFactory.get(jobName).incrementer(new RunIdIncrementer());
 		  
@@ -189,44 +189,28 @@ public class IcignalBatchJob {
 		  try {
 			  for(Map<String, Object> step : stepInfoList) {
 				  Step stepObj = null;
-					int seq =	(int)step.get("stepSeq");
+				  int seq =	(int)step.get("stepSeq");
 					
 				  String stepMethodNm  =	(String)step.get("stepMethodNm");
 				  String stepNm  =	(String)step.get("stepNm");
 				  System.out.println("stepMethodNm: " + stepMethodNm + "\t" + "stepNm: " + stepNm );
 				  String itemReaderNm  =	(String)step.get("itemReaderNm");
 			      String itemWriterNm  =	(String)step.get("itemWriterNm");
-			      String classNm  =	(String)step.get("classNm");
-			     // Class cls = Class.forName("icignal.batch.config.StepConfig");
+			      String stepClassFieldNm  =	(String)step.get("stepClassFieldNm");
 				  
 			      if(ICNStringUtility.isNotEmptyAll(itemReaderNm, itemWriterNm)) {
-			    	  Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
-						stepObj = (Step)method.invoke( stepConfig , stepNm, 
+			    	  Method method = this.getClass().getField(stepClassFieldNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
+						stepObj = (Step)method.invoke( this.getClass().getField(stepClassFieldNm).get(this) , stepNm, 
 								this.getClass().getField(itemReaderNm).get(this),
 								this.getClass().getField(itemWriterNm).get(this) );
 			    	  
 			      }else {
-			    	  Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
+			    	  Method method = this.getClass().getField(stepClassFieldNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
 						//	stepObj = (Step)method.invoke( stepConfig , stepNm );
-							stepObj = (Step)method.invoke( stepConfig , stepNm );
+							stepObj = (Step)method.invoke( this.getClass().getField(stepClassFieldNm).get(this) , stepNm );
 			    	  
 			      }
 			      
-			    /*  
-				  if(ICNStringUtility.isEquals(stepMethodNm, "stepItem") ) {
-				//	stepObj =  stepConfig.stepItem(stepNm, this.getClass().getField((String)step.get("itemReaderNm")).get(this), this.getClass().getField((String)step.get("itemWriterNm")).get(this));
-					Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
-					stepObj = (Step)method.invoke( stepConfig , stepNm, 
-							this.getClass().getField(itemReaderNm).get(this),
-							this.getClass().getField(itemWriterNm).get(this) );
-				  }else {				  
-					Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
-				//	stepObj = (Step)method.invoke( stepConfig , stepNm );
-					stepObj = (Step)method.invoke( stepConfig , stepNm );
-
-				  }*/
-			  
-			  
 				if(seq == 1)	sjb = jobBuilder.start(stepObj); 
 				else sjb = sjb.next(stepObj);
 				
@@ -238,12 +222,12 @@ public class IcignalBatchJob {
 			return	   sjb.build();
 	}
 	
+	*/
 	
 	
 	
-	
-	@SuppressWarnings({ "unchecked"})	
-	public Job callJob(String jobName)  throws Exception {
+//	@SuppressWarnings({ "unchecked"})	
+	/*public Job callJob(String jobName)  throws Exception {
 		System.out.println("callJob.......................start");
 		
 //	    JobBuilder jobBuilder =	 jobBuilderFactory.get("jobMember").incrementer(new RunIdIncrementer());
@@ -302,7 +286,7 @@ public class IcignalBatchJob {
 	   
 		return sjb.build();
 		
-	}
+	}*/
 	
 	
 	/* 1:초(Seconds), 2:분(Minutes),  3:시(Hours), 4:일(Day-of-Month), 5:월(Months), 6:요일(Days-of-Week), 7:연도(Year) - optional  */
@@ -330,10 +314,6 @@ public class IcignalBatchJob {
                 .build();
     }
 	
-	
-
-	
-
 		
 	 //등급
 	@Bean(name="jobGrade")
@@ -348,38 +328,8 @@ public class IcignalBatchJob {
 	}
 	
 	
+
 	
-	@Autowired
-	public ICGMapper mapper;
-	
-	
-	
-	 @SuppressWarnings("serial")
-	public Map<String, Object> findJobInfo(String jobName) {
-		 
-		 List<Map<String, Object>> jobs = mapper.findJobInfo(new HashMap<String, Object>() {
-				{
-	                put("jobName", jobName);
-	            }
-			}
-				);
-		 
-		 return jobs.stream().findFirst().get();
-	 }
-	 
-	 
-	 @SuppressWarnings("serial")
-	public List<Map<String, Object>> findJobStepInfo(String jobName) {
-		 
-		 List<Map<String, Object>> jobStepList = mapper.findJobStepInfo(new HashMap<String, Object>() {
-				{
-	                put("jobName", jobName);
-	            }
-			}
-				);
-		 
-		 return jobStepList;
-	 }
 	
 	
 	

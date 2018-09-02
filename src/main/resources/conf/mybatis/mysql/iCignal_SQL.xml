@@ -39,6 +39,7 @@
 	     		  , b.step_seq		    as stepSeq
 	     		  , b.step_nm			as stepNm
 	     		  , b.step_desc		    as stepDesc
+	     		  , b.step_class_field_nm     as stepClassFieldNm
 	     		  , b.step_method_nm	as stepMethodNm
 	     		  , b.item_reader_nm	as itemReaderNm
 	     		  , b.item_writer_nm	as itemWriterNm
