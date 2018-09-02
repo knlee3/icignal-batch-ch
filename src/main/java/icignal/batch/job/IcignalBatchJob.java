@@ -176,7 +176,9 @@ public class IcignalBatchJob {
 
 	}
 
+
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Job callJobProc(String jobName) throws Exception {
 		
 		  JobBuilder jobBuilder = jobBuilderFactory.get(jobName).incrementer(new RunIdIncrementer());
@@ -192,15 +194,37 @@ public class IcignalBatchJob {
 				  String stepMethodNm  =	(String)step.get("stepMethodNm");
 				  String stepNm  =	(String)step.get("stepNm");
 				  System.out.println("stepMethodNm: " + stepMethodNm + "\t" + "stepNm: " + stepNm );
+				  String itemReaderNm  =	(String)step.get("itemReaderNm");
+			      String itemWriterNm  =	(String)step.get("itemWriterNm");
+			      String classNm  =	(String)step.get("classNm");
+			     // Class cls = Class.forName("icignal.batch.config.StepConfig");
+				  
+			      if(ICNStringUtility.isNotEmptyAll(itemReaderNm, itemWriterNm)) {
+			    	  Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
+						stepObj = (Step)method.invoke( stepConfig , stepNm, 
+								this.getClass().getField(itemReaderNm).get(this),
+								this.getClass().getField(itemWriterNm).get(this) );
+			    	  
+			      }else {
+			    	  Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
+						//	stepObj = (Step)method.invoke( stepConfig , stepNm );
+							stepObj = (Step)method.invoke( stepConfig , stepNm );
+			    	  
+			      }
+			      
+			    /*  
 				  if(ICNStringUtility.isEquals(stepMethodNm, "stepItem") ) {
 				//	stepObj =  stepConfig.stepItem(stepNm, this.getClass().getField((String)step.get("itemReaderNm")).get(this), this.getClass().getField((String)step.get("itemWriterNm")).get(this));
-					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm, String.class, Object.class, Object.class);
-					stepObj = (Step)method.invoke( stepConfig , stepNm, this.getClass().getField((String)step.get("itemReaderNm")).get(this), this.getClass().getField((String)step.get("itemWriterNm")).get(this) );
+					Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm, String.class, Object.class, Object.class);
+					stepObj = (Step)method.invoke( stepConfig , stepNm, 
+							this.getClass().getField(itemReaderNm).get(this),
+							this.getClass().getField(itemWriterNm).get(this) );
 				  }else {				  
-					Method method = Class.forName("icignal.batch.config.StepConfig").getMethod(stepMethodNm,  String.class);
+					Method method = this.getClass().getField(classNm).get(this).getClass().getMethod(stepMethodNm,  String.class);
+				//	stepObj = (Step)method.invoke( stepConfig , stepNm );
 					stepObj = (Step)method.invoke( stepConfig , stepNm );
 
-				  }
+				  }*/
 			  
 			  
 				if(seq == 1)	sjb = jobBuilder.start(stepObj); 

@@ -261,6 +261,7 @@ public class ICNStringUtility {
 	}
 	
 	
+	
 	public synchronized final static boolean isEquals(String str1,  String str2 ){
 	    if(str1 == null || str2 == null)  return false;
 	    if(str1.equals(str2)) return true;
@@ -280,8 +281,12 @@ public class ICNStringUtility {
 	 * @return
 	 */
 	public synchronized final static boolean isNotEmptyAll(String ... strings ){
-		
-		return !isEmptyAll(strings);
+		boolean result = false;
+		for (int i = 0; i < strings.length; i++) {
+		     if(isNotEmpty(strings[i])) result = true;
+		     else return false;
+		}
+		return result;
 	}
 
 
