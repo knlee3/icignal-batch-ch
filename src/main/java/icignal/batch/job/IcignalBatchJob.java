@@ -1,11 +1,12 @@
 package icignal.batch.job;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import icignal.batch.config.StepConfig;
 import icignal.batch.icg.repository.ICGMapper;
+import icignal.batch.job.BatchHelper.CronTriggerFactoryBeanBuilder;
+import icignal.batch.job.BatchHelper.JobDetailFactoryBeanBuilder;
+import icignal.batch.util.ICNStringUtility;
 
 @Configuration
 public class IcignalBatchJob extends IcignalBatchCommonJob {
@@ -30,13 +34,12 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
     		ItemWriter<Map<String,Object>> writerIC,
     		ICGMapper mapper
     		) {
-        super.jobBuilderFactory = jobBuilderFactory;
-        super.readerB2C = readerB2C;
-        super.readerIC = readerIC;
-        super.writerIC = writerIC;
-        super.stepConfig = stepConfig;
-        super.mapper = mapper;
-        
+		        super.jobBuilderFactory = jobBuilderFactory;
+		        super.readerB2C = readerB2C;
+		        super.readerIC = readerIC;
+		        super.writerIC = writerIC;
+		        super.stepConfig = stepConfig;
+		        super.mapper = mapper;
     }
 
 
@@ -84,7 +87,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	@Bean(name="jobMember")	
 	public Job jobMember() throws Exception {
 		
-	  Job job =	callSimpleJobProc("jobMember");
+	  //Job job =	callSimpleJobProc("jobMember");
 	/*	
 	Job	job = jobBuilderFactory.get("jobMember")
 								   .incrementer(new RunIdIncrementer())
@@ -94,77 +97,74 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 								   .next(stepConfig.stepItem("stepMemberMobileAppInfoExtract", readerB2C, writerIC)) 
 								   .next(stepConfig.stepStoredProcedureCallTasklet("stepMemberLoad"))
 								   .build();*/
-		return job;
+	/*	StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+	    StackTraceElement e = stacktrace[1];//coz 0th will be getStackTrace so 1st
+	    String methodName = e.getMethodName();
+	    System.out.println("methodName::::::::::::: " + methodName);*/
+		
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
 	  
-
 	}
-
-
-	
-	
 	
 	
 	/* 1:초(Seconds), 2:분(Minutes),  3:시(Hours), 4:일(Day-of-Month), 5:월(Months), 6:요일(Days-of-Week), 7:연도(Year) - optional  */
 	 
     @Bean
     public CronTriggerFactoryBean jobMemberTrigger() throws Exception {
-    	//  Map<String, Object>  jobInfo = findJobInfo("jobMember");
-		//  String jobName = (String)jobInfo.get("jobNm");
-		//  String execCycle = (String)jobInfo.get("execCycle");
-		  
-		/*  log.info("jobName::::::::: "  + jobName);
-		  System.out.println("execCycle::::::::: "  + execCycle);
-    	*/
-        return BatchHelper.cronTriggerFactoryBeanBuilder()
+      /*  return BatchHelper.cronTriggerFactoryBeanBuilder()
                 .cronExpression((String)findJobInfo("jobMember").get("execCycle"))
                 .name((String)findJobInfo("jobMember").get("jobNm"))  
                 .jobDetailFactoryBean(jobMemberJobDetail())                
                 .build();
+        */    	
+    	 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
     }
 
-    @Bean
+  /*  @Bean
     public JobDetailFactoryBean jobMemberJobDetail() throws Exception   {
         return BatchHelper.jobDetailFactoryBeanBuilder()
                 .job(jobMember())
                 .build();
-    }
+    }*/
 	
 		
 	 //등급
 	@Bean(name="jobGrade")
 	public Job jobGrade() throws Exception {
-		Job job = jobBuilderFactory.get("jobGrade")
+	/*	Job job = jobBuilderFactory.get("jobGrade")
 								   .incrementer(new RunIdIncrementer())
 								   .start(stepConfig.stepTruncateTableTasklet("stepGradeJobTruncTable"))
 								   .next(stepConfig.stepItem("stepGradeExtract", readerB2C, writerIC))
 								   .next(stepConfig.stepItem("stepGradeLoad", readerIC, writerIC))
-								   .build();
-		return job;
-	}
-	
+								   .build();*/
+		return buildSimpleJob("jobGrade");
+	}	
 	
 	
 	  @Bean
 	  public CronTriggerFactoryBean jobGradeTrigger() throws Exception {
-		  Map<String, Object>  jobInfo = findJobInfo("jobGrade");
+	/*	  Map<String, Object>  jobInfo = findJobInfo("jobGrade");
 		  String jobName = (String)jobInfo.get("jobNm");
-		  String execCycle = (String)jobInfo.get("execCycle");
+		  String execCycle = (String)jobInfo.get("execCycle");		  */
+	     /* return BatchHelper.cronTriggerFactoryBeanBuilder()
+	             .cronExpression(execCycle)
+	             .name(jobName)      
+	             .jobDetailFactoryBean(jobGradeJobDetail())	                
+	             .build();*/
+	/*	  
+		  CronTriggerFactoryBeanBuilder ctfbb =  BatchHelper.cronTriggerFactoryBeanBuilder();
+		  ctfbb = ctfbb.cronExpression(execCycle).name(jobName);
+		  String buildJobDetail = "buildJobDetail";
 		  
-	        return BatchHelper.cronTriggerFactoryBeanBuilder()
-//	                .cronExpression("0 0/1 * 1/1 * ? *")
-	                .cronExpression(execCycle)
-	                .name(jobName)      
-	                .jobDetailFactoryBean(jobGradeJobDetail())	                
-	                .build();
+		  
+		  Method method = this.getClass().getMethod(buildJobDetail, String.class);
+		  JobDetailFactoryBean jdfb   = (JobDetailFactoryBean)method.invoke( this , jobName);
+		  ctfbb.jobDetailFactoryBean(jdfb);
+		  CronTriggerFactoryBean ctfb = ctfbb.build();*/
+		       
+		 return buildCronTrigger("jobGrade"); 
 	  }
 
-	  @Bean
-	  public JobDetailFactoryBean jobGradeJobDetail() throws Exception   {
-	       return BatchHelper.jobDetailFactoryBeanBuilder()
-	                .job(jobGrade())
-	                .build();
-	  }
-	
 	  
 	  /*	
 		@Bean(name="jobProduct")
@@ -178,9 +178,29 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 			return job;
 		}
 	*/
-		
-		
-	  
+	
+	 /**
+	  * 상품마스터 Job
+	  * @return Job
+	  * @throws Exception
+	  */
+/*	@Bean(name="jobProduct")
+	public Job jobProduct() throws Exception {
+		return  buildSimpleJob("jobProduct");
+	}
+*/
+	 /**
+	  * Job 상품마스터 Triger
+	  * @return
+	  * @throws Exception
+	  */
+	/* @Bean
+	 public CronTriggerFactoryBean jobProductTrigger() throws Exception {
+		 return buildCronTrigger("jobProduct"); 
+	  }
+*/
+	
+	
 	
 	
 /*
@@ -196,6 +216,29 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	}
 
 	*/
+	  
+	  
+	/**
+	 *  일별 회원수신동의 집계
+	 * @return
+	 * @throws Exception
+	 */
+	/*@Bean(name="jobMeberAgreeSumMrt")
+	public Job jobMeberAgreeSumMrt() throws Exception {
+		return  buildSimpleJob("jobMeberAgreeSumMrt");
+	}*/
+	
+	/**
+	 * 일별 회원 수신동의 집계 트리거
+	 * @return CronTriggerFactoryBean
+	 * @throws Exception
+	 */
+	/* @Bean
+	 public CronTriggerFactoryBean jobMeberAgreeSumMrtTrigger() throws Exception {
+		 return buildCronTrigger("jobProduct"); 
+	  }
+*/
+	
 	
 	
 	/*
@@ -212,6 +255,25 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	}
 	
 	*/
+	 
+	 
+	    /**
+	     * 일별장바구니 데이터 수집(FromB2C)
+	     * @return
+	     * @throws Exception
+	     */
+	/*	@Bean(name="jobShoppingCartDailyFromB2C")
+		public Job jobShoppingCartDailyFromB2C() throws Exception {
+			return  buildSimpleJob("jobShoppingCartDailyFromB2C");
+		}
+		*/
+	  
+	  /*
+		 @Bean
+		 public CronTriggerFactoryBean jobShoppingCartDailyFromB2CTrigger() throws Exception {
+			 return buildCronTrigger("jobShoppingCartDailyFromB2C"); 
+		  }
+*/
 	
 	
 	

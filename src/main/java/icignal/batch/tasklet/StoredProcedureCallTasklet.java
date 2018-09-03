@@ -14,11 +14,11 @@ import org.springframework.batch.repeat.RepeatStatus;
 
 
 import icignal.batch.icg.repository.ICGMapper;
-import icignal.batch.step.item.MapperDao;
+import icignal.batch.step.item.CommonService;
 import icignal.batch.util.ICNStringUtility;
 
 
-public class StoredProcedureCallTasklet extends MapperDao implements Tasklet {
+public class StoredProcedureCallTasklet extends CommonService implements Tasklet {
 
 	private static final Logger log = LoggerFactory.getLogger(StoredProcedureCallTasklet.class);
 //	private final  ICGMapper mapper;

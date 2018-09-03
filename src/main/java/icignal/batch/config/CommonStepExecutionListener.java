@@ -12,13 +12,13 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.stereotype.Component;
 
 
-import icignal.batch.step.item.MapperDao;
+import icignal.batch.step.item.CommonService;
 import icignal.batch.util.ICNDateUtility;
 import icignal.batch.util.ICNStringUtility;
 
 
 @Component
-public class CommonStepExecutionListener extends MapperDao  implements StepExecutionListener{
+public class CommonStepExecutionListener extends CommonService  implements StepExecutionListener{
 
 	private static final Logger log = LoggerFactory.getLogger(CommonStepExecutionListener.class);
 	

@@ -21,7 +21,7 @@ public class CommonItemWriter  { //extends MapperDao{
 
 	private static final Logger log = LoggerFactory.getLogger(CommonItemWriter.class);	
 
-	@Autowired MapperDao dao;
+	@Autowired CommonService dao;
 	
     @Bean    
     @StepScope

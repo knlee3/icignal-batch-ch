@@ -18,7 +18,7 @@ import icignal.batch.util.ICNDateUtility;
 import icignal.batch.util.ICNStringUtility;
 
 
-public class MapperDao  {
+public class CommonService  {
     
 	@Autowired
 	public ICGMapper mapper;
@@ -31,7 +31,7 @@ public class MapperDao  {
 	
 	
 	
-	private static final Logger log = LoggerFactory.getLogger(MapperDao.class);	
+	private static final Logger log = LoggerFactory.getLogger(CommonService.class);	
 	
     public MyBatisBatchItemWriter<Map<String,Object>> writer( SqlSessionFactory sqlSessionFactory, 
     		 Map<String,Object> jobParameters,	String jobName, String stepName ) throws Exception {
@@ -72,10 +72,8 @@ public class MapperDao  {
 				
 				 reader.setParameterValues(new HashMap<String, Object>() {	     
 					{
-						put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd ));
+						put("startDt", ICNDateUtility.getFormattedDate(startDt, ICNDateUtility.yyyyMMdd));
 						put("endDt", ICNDateUtility.getFormattedDate(endDt, ICNDateUtility.yyyyMMdd ));
-		                
-		              
 		            }
 		        });
 			 }

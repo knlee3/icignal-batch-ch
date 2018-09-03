@@ -11,9 +11,9 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
 import icignal.batch.icg.repository.ICGMapper;
-import icignal.batch.step.item.MapperDao;
+import icignal.batch.step.item.CommonService;
 
-public class TruncateTableTasklet extends MapperDao implements Tasklet {
+public class TruncateTableTasklet extends CommonService implements Tasklet {
 	
 	private static final Logger log = LoggerFactory.getLogger(TruncateTableTasklet.class);
 

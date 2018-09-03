@@ -23,7 +23,7 @@ public class CommonItemReader {
 
 	private static final Logger log = LoggerFactory.getLogger(CommonItemReader.class);	
 
-	@Autowired MapperDao dao;
+	@Autowired CommonService dao;
 
 	@StepScope
 	@Bean

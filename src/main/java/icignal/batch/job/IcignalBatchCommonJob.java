@@ -13,34 +13,27 @@ import org.springframework.batch.core.job.builder.SimpleJobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
 import icignal.batch.config.StepConfig;
 import icignal.batch.icg.repository.ICGMapper;
+import icignal.batch.job.BatchHelper.CronTriggerFactoryBeanBuilder;
+import icignal.batch.job.BatchHelper.JobDetailFactoryBeanBuilder;
 import icignal.batch.util.ICNStringUtility;
 
 public class IcignalBatchCommonJob {
 	
-	// @Autowired
 	public StepConfig stepConfig;
-	
-//	@Autowired
 	public ItemWriter<Map<String,Object>> writerIC;
-	
-	
-//	@Autowired
 	public ItemReader<Map<String, Object>> readerB2C;
-	
-	
-	// @Autowired
 	public ItemReader<Map<String, Object>> readerIC;
-	
-	// @Autowired
 	public ICGMapper mapper;
 	
 	public JobBuilderFactory jobBuilderFactory;
 	
-	public Job callSimpleJobProc(String jobName) throws Exception {
+	
+	public Job buildSimpleJob(String jobName) throws Exception {
 		
 		  JobBuilder jobBuilder = jobBuilderFactory.get(jobName).incrementer(new RunIdIncrementer());
 		  
@@ -82,6 +75,28 @@ public class IcignalBatchCommonJob {
 			}
 			return	   sjb.build();
 	}
+	
+	
+	
+	public CronTriggerFactoryBean buildCronTrigger(String jobName) throws Exception {
+		  
+		 return  BatchHelper.cronTriggerFactoryBeanBuilder()
+				 			.cronExpression((String)findJobInfo(jobName).get("execCycle"))
+				 			.name(jobName)
+				 			.jobDetailFactoryBean((JobDetailFactoryBean)buildJobDetail(jobName))
+				 			.build();  
+	}
+	  
+	  /**
+	   * JobDetail Build
+	   * @param jobName
+	   * @return
+	   * @throws Exception
+	   */
+	  public JobDetailFactoryBean buildJobDetail(String jobName) throws Exception   {
+		  return BatchHelper.jobDetailFactoryBeanBuilder().job((Job)this.getClass().getMethod(jobName).invoke( this )).build();
+	  }
+	
 	
 
 	

@@ -1346,23 +1346,38 @@ public class ICNStringUtility {
 		return arry[arry.length-1];
 	}
 	
+	/**
+	 * 특정문자열부터 뒤에서부터 자른다. 예: jobMemberTriger 문자열에서 Triger 문자열 제거-> jobMember
+	 * @param src
+	 * @param indexStr
+	 * @return
+	 */
+	public synchronized final static String getStringLastCut(String src, String  indexStr) {
+		
+		return src.substring(0, src.lastIndexOf(indexStr));
+		
+	}
+	
 	
 	
 	public static void main(String[] args) {
 		System.out.println("1111111111111111111");
 	//	String  str ="icignal.batch.b2c.repository.B2CMapper.findOrderProdDailySummary";
-		String  str ="mrt.afd,mrt.sdfaml,mrt.sefs";
+	//	String  str ="mrt.afd,mrt.sdfaml,mrt.sefs";
 	//	System.out.println( str.length());
 	//    System.out.println(getStringOfLastSper(str, "."));
 		
 	    
 	    
 //	    List<String> items = Arrays.asList(str.split("\\s*,\\s*"));
-	    List<String> items = Arrays.asList(str.split(","));
+	 /*   List<String> items = Arrays.asList(str.split(","));
 		for(String item : items) {
 			System.out.println("item:" + item );
 			
-		}
+		}*/
+		
+		System.out.println(getStringLastCut("jobMemberTrigger", "Trigger"));
+		
 		
 	}
 
