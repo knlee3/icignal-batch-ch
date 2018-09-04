@@ -33,14 +33,8 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(QuartzProperties.class)
 @EnableBatchProcessing
 public class BatchConfiguration {
-
-
 	
-	private static final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
-	
-	
-
-	
+	private static final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);	
 	
 	/**
      * JobRegistry 에 Job 을 자동으로 등록하기 위한 설정.
@@ -109,10 +103,6 @@ public class BatchConfiguration {
 	        return factory;
 	    }
 	    
-	    
-	 
-	    
-
 	    /**
 	     * Scheduler 에 Trigger 를 자동으로 등록하기 위한 설정.
 	     *
@@ -188,10 +178,4 @@ public class BatchConfiguration {
 	        };
 	    }
 	 
-	
-	
-	
-	
-	
-	
 }

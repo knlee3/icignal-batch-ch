@@ -1,11 +1,9 @@
 package icignal.batch.job;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -13,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
-import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import icignal.batch.config.StepConfig;
 import icignal.batch.icg.repository.ICGMapper;
-import icignal.batch.job.BatchHelper.CronTriggerFactoryBeanBuilder;
-import icignal.batch.job.BatchHelper.JobDetailFactoryBeanBuilder;
 import icignal.batch.util.ICNStringUtility;
 
 @Configuration
@@ -54,29 +49,6 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
     jobLauncher.run(job, new JobParameters(parameters));
    */
 
-	/**
-	 * 일별주문상품 집계 잡
-	 * @return
-	 * @throws Exception
-	 */
-	/*@Bean(name="jobOrderProdDaily")
-	public Job jobOrderProdDaily() throws Exception {
-		Job job = jobBuilderFactory.get("jobOrderProdDaily")
-								   .incrementer(new RunIdIncrementer())
-								//   .start(stepConfig.stepTruncateTable())
-							//	   .next(stepConfig.stepOrderProdDailyExtract())
-								//   .next(stepConfig.stepOrderProdDailyLoad())
-								   .start(stepConfig.stepTruncateTableTasklet("stepOrderProdDailyJobTruncTable"))
-								   .next(stepConfig.stepItem("stepOrderProdDailyExtract", readerB2C, writerIC)) 
-								   .next(stepConfig.stepStoredProcedureCallTasklet("stepOrderProdDailyLoad")) 
-								   .build();
-		
-				
-	
-		
-		return job;
-	}
-	*/
 
 
 	/**
@@ -84,7 +56,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	 * @return
 	 * @throws Exception 
 	 */	
-	@Bean(name="jobMember")	
+	@Bean
 	public Job jobMember() throws Exception {
 		
 	  //Job job =	callSimpleJobProc("jobMember");
@@ -97,10 +69,6 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 								   .next(stepConfig.stepItem("stepMemberMobileAppInfoExtract", readerB2C, writerIC)) 
 								   .next(stepConfig.stepStoredProcedureCallTasklet("stepMemberLoad"))
 								   .build();*/
-	/*	StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-	    StackTraceElement e = stacktrace[1];//coz 0th will be getStackTrace so 1st
-	    String methodName = e.getMethodName();
-	    System.out.println("methodName::::::::::::: " + methodName);*/
 		
 		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
 	  
@@ -129,7 +97,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 		
 	 //등급
-	@Bean(name="jobGrade")
+	@Bean
 	public Job jobGrade() throws Exception {
 	/*	Job job = jobBuilderFactory.get("jobGrade")
 								   .incrementer(new RunIdIncrementer())
@@ -137,7 +105,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 								   .next(stepConfig.stepItem("stepGradeExtract", readerB2C, writerIC))
 								   .next(stepConfig.stepItem("stepGradeLoad", readerIC, writerIC))
 								   .build();*/
-		return buildSimpleJob("jobGrade");
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
 	}	
 	
 	
@@ -162,7 +130,7 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 		  ctfbb.jobDetailFactoryBean(jdfb);
 		  CronTriggerFactoryBean ctfb = ctfbb.build();*/
 		       
-		 return buildCronTrigger("jobGrade"); 
+		  return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
 	  }
 
 	  
@@ -184,21 +152,21 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	  * @return Job
 	  * @throws Exception
 	  */
-/*	@Bean(name="jobProduct")
+	@Bean
 	public Job jobProduct() throws Exception {
-		return  buildSimpleJob("jobProduct");
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
 	}
-*/
+
 	 /**
 	  * Job 상품마스터 Triger
 	  * @return
 	  * @throws Exception
 	  */
-	/* @Bean
+	 @Bean
 	 public CronTriggerFactoryBean jobProductTrigger() throws Exception {
-		 return buildCronTrigger("jobProduct"); 
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
 	  }
-*/
+
 	
 	
 	
@@ -223,22 +191,62 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	 * @return
 	 * @throws Exception
 	 */
-	/*@Bean(name="jobMeberAgreeSumMrt")
+	@Bean(name="jobMeberAgreeSumMrt")
 	public Job jobMeberAgreeSumMrt() throws Exception {
-		return  buildSimpleJob("jobMeberAgreeSumMrt");
-	}*/
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
 	
 	/**
 	 * 일별 회원 수신동의 집계 트리거
 	 * @return CronTriggerFactoryBean
 	 * @throws Exception
 	 */
-	/* @Bean
+	 @Bean
 	 public CronTriggerFactoryBean jobMeberAgreeSumMrtTrigger() throws Exception {
-		 return buildCronTrigger("jobProduct"); 
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
 	  }
-*/
+
 	
+	
+
+		/**
+		 * 일별주문상품 집계 잡
+		 * @return
+		 * @throws Exception
+		 */
+		/*@Bean(name="jobOrderProdDaily")
+		public Job jobOrderProdDaily() throws Exception {
+			Job job = jobBuilderFactory.get("jobOrderProdDaily")
+									   .incrementer(new RunIdIncrementer())
+									   .start(stepConfig.stepTruncateTableTasklet("stepOrderProdDailyJobTruncTable"))
+									   .next(stepConfig.stepItem("stepOrderProdDailyExtract", readerB2C, writerIC)) 
+									   .next(stepConfig.stepStoredProcedureCallTasklet("stepOrderProdDailyLoad")) 
+									   .build();	
+			return job;
+		}
+		*/
+	 
+	 /**
+	  * 일별주문상품 수집
+	  * @return
+	  * @throws Exception
+	  */
+	@Bean(name="jobOrderProdDaily")
+	public Job jobOrderProdDaily() throws Exception {
+		 return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	 
+	/**
+	 * 일별주문상품 수집 Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	 @Bean
+	 public CronTriggerFactoryBean jobOrderProdDailyTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	  }
+
 	
 	
 	/*
@@ -256,25 +264,29 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 	*/
 	 
-	 
-	    /**
-	     * 일별장바구니 데이터 수집(FromB2C)
-	     * @return
-	     * @throws Exception
-	     */
-	/*	@Bean(name="jobShoppingCartDailyFromB2C")
-		public Job jobShoppingCartDailyFromB2C() throws Exception {
-			return  buildSimpleJob("jobShoppingCartDailyFromB2C");
-		}
-		*/
-	  
-	  /*
-		 @Bean
-		 public CronTriggerFactoryBean jobShoppingCartDailyFromB2CTrigger() throws Exception {
-			 return buildCronTrigger("jobShoppingCartDailyFromB2C"); 
-		  }
-*/
+
+	 /**
+	  * 일별 장바구니 (FromB2C)
+	  * @return Job
+	  * @throws Exception
+	  */
+	@Bean
+	public Job jobShoppingCartDailyFromB2C() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
 	
+	 /**
+	  * 일별 장바구니 (FromB2C) Triger
+	  * @return
+	  * @throws Exception
+	  */
+	 @Bean
+	 public CronTriggerFactoryBean jobShoppingCartDailyFromB2CTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	  }
+
+	 
+	 
 	
 	
 /*	
@@ -288,9 +300,31 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 		return job;
 	}
 	
-	
 	*/
+
+	 /**
+	  * 일별무료샘플신청 (FromB2C)
+	  * @return
+	  * @throws Exception
+	  */
+	@Bean
+	public Job jobSampleReqDailyFromB2C() throws Exception {
+			
+		 return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
 	
+	/**
+	 * 일별무료샘플신청 (FromB2C) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	 @Bean
+	 public CronTriggerFactoryBean jobSampleReqDailyFromB2CTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	  }
+
+	
+	 
 	/*
 	 //일별회원관심상품 (FromB2C)
 	@Bean(name="jobInterestProductFromB2C")
@@ -304,7 +338,26 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 	*/
 
+	 /**
+	  * 일별회원관심상품 (FromB2C)
+	  * @return
+	  * @throws Exception
+	  */
+	@Bean
+	public Job jobInterestProductFromB2C() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
 	
+	/**
+	 * 일별회원관심상품 (FromB2C) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	 @Bean
+	 public CronTriggerFactoryBean jobInterestProductFromB2CTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	  }
+	 
 	
 /*	
 	 //캠페인반응 (FromB2C)
@@ -319,7 +372,27 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 	*/
 	
+	 /**
+	  * 캠페인반응 (FromB2C)
+	  * @return
+	  * @throws Exception
+	  */
+	@Bean
+	public Job jobCampResposeFromB2C() throws Exception {
+		 return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
 	
+	 /**
+	  * 캠페인반응 (FromB2C) Trigger
+	  * @return
+	  * @throws Exception
+	  */
+	 @Bean
+	 public CronTriggerFactoryBean jobCampResposeFromB2CTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	  }
+	 
+	 
 	
 	/*
 	
@@ -335,6 +408,27 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	
 
 	*/
+	 
+	/**
+	 * 캠페인구매반응 (FromB2C)
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public Job jobCampOrdResponseFromB2C() throws Exception {
+		 return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
+	/**
+	 * 캠페인구매반응 (FromB2C) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public CronTriggerFactoryBean jobCampOrdResponseFromB2CTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
+	
 	
 	
 	
@@ -353,6 +447,28 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 		return job;
 	}
 */
+	/**
+	 * 장바구니 집계 마트(iCignal)
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public Job jobShoppingCartMrt() throws Exception {
+		 return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
+	/**
+	 * 장바구니 집계 마트(iCignal) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public CronTriggerFactoryBean jobShoppingCartMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
+	
+	
+	
 	
 	
 	
@@ -372,6 +488,18 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	}
 */
 	
+	@Bean
+	public Job jobMemberMrt() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
+	@Bean
+	public CronTriggerFactoryBean jobMemberMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
+	
+	
+	
 	
 	/**
 	 * 회원맞춤상품 집계 마트(iCignal)
@@ -387,7 +515,26 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 				.build();
 		return job;
 	}*/
-	 
+	
+	/**
+	 * 회원맞춤상품 집계 마트(iCignal)
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public Job jobMemberFitProdMrt() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
+	/**
+	 * 회원맞춤상품 집계 마트(iCignal) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public CronTriggerFactoryBean jobMemberFitProdMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
 	
 	
 	/**
@@ -405,10 +552,25 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 		return job;
 	}
 */
+	/**
+	 * 비구매관심상품 집계 마트(iCignal)
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public Job jobInterestProdMartMrt() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());		
+	}
 	
-	
-	
-	
+	/**
+	 * 비구매관심상품 집계 마트(iCignal) Trigger
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public CronTriggerFactoryBean jobInterestProdMartMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
 	
 	
 	/**
@@ -416,7 +578,8 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	 * @return
 	 * @throws Exception
 	 */
-	/*@Bean(name="jobCustProdSumMrt")
+	/*
+	@Bean(name="jobCustProdSumMrt")
 	public Job jobCustProdSumMrt() throws Exception {
 		Job job = jobBuilderFactory
 				.get("jobCustProdSumMrt")
@@ -428,6 +591,16 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 	*/
 	
 	
+	@Bean
+	public Job jobCustProdSumMrt() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+	
+	
+	@Bean
+	public CronTriggerFactoryBean jobCustProdSumMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
 	
 	/**
 	 * 상품별구매(iCignal)
@@ -444,7 +617,15 @@ public class IcignalBatchJob extends IcignalBatchCommonJob {
 		return job;
 	}*/
 	
+	@Bean
+	public Job jobProdOrdMrt() throws Exception {
+		return buildSimpleJob(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
 	
+	@Bean
+	public CronTriggerFactoryBean jobProdOrdMrtTrigger() throws Exception {
+		 return buildCronTrigger( ICNStringUtility.getStringLastCut(Thread.currentThread().getStackTrace()[1].getMethodName(), "Trigger") );
+	}
 	
 	
 }
